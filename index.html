@@ -240,6 +240,165 @@
             to { opacity: 1; transform: scale(1); }
         }
         
+        .main-buttons {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+        
+        .main-btn {
+            background: linear-gradient(135deg, #ff0000, #ff4444);
+            border: none;
+            color: white;
+            padding: 25px 50px;
+            border-radius: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: btnSlideUp 0.8s ease-out both;
+        }
+        
+        .main-btn:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes btnSlideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .main-btn:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 25px 60px rgba(255, 0, 0, 0.6);
+        }
+        
+        .search-step {
+            display: none;
+            animation: stepFadeIn 0.6s ease-out;
+        }
+        
+        .search-step.show {
+            display: block;
+        }
+        
+        @keyframes stepFadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .filter-controls {
+            display: none;
+            margin-top: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: filterSlideIn 0.5s ease-out;
+        }
+        
+        .filter-controls.show {
+            display: flex;
+        }
+        
+        @keyframes filterSlideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 68, 68, 0.5);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            transform: translateY(-2px);
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #ff0000, #ff4444);
+            border-color: #ff0000;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .gender-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            width: 100%;
+        }
+        
+        .gender-select:focus {
+            outline: none;
+            border-color: #ff4444;
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.4);
+        }
+        
+        .gender-select option {
+            background: #333;
+            color: white;
+        }
+        
+        .validation-message {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            color: #ff4444;
+            font-weight: 500;
+            animation: validationSlide 0.3s ease-out;
+        }
+        
+        @keyframes validationSlide {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .view-profile-link {
+            color: #ff0000;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .view-profile-link:hover {
+            color: #ff4444;
+        }
+        
         @keyframes textGlow {
             from { filter: drop-shadow(0 0 30px rgba(255, 0, 0, 0.8)); }
             to { filter: drop-shadow(0 0 50px rgba(255, 255, 255, 0.8)); }
@@ -526,6 +685,8 @@
             .input { min-width: auto; }
             .grid { grid-template-columns: 1fr; }
             .modal-content { padding: 2rem; }
+            .main-buttons { flex-direction: column; gap: 2rem; align-items: center; }
+            .main-btn { width: 80%; }
         }
     </style>
 </head>
@@ -565,13 +726,28 @@
                 <p>Executive MBA Network</p>
             </div>
             
-            <div class="glass">
+            <!-- Main Buttons -->
+            <div id="mainButtons" class="glass">
+                <div class="main-buttons">
+                    <button class="main-btn" onclick="showRegisterForm()">📝 Register As Alumni</button>
+                    <button class="main-btn" onclick="showSearchStep()">🔍 Search Alumni</button>
+                </div>
+            </div>
+            
+            <!-- Search Step -->
+            <div id="searchStep" class="search-step glass">
+                <button class="back-btn" onclick="showMainButtons()">← Back</button>
                 <div class="search-form">
                     <input type="text" id="searchCompany" class="input" placeholder="🔍 Search by company name...">
-                    <input type="text" id="searchCity" class="input" placeholder="📍 Filter by city...">
                     <button onclick="searchAlumni()" class="btn" id="searchBtn">Search Alumni</button>
                 </div>
-                <button onclick="showAddForm()" class="btn">✨ Add Alumni</button>
+                
+                <div id="filterControls" class="filter-controls">
+                    <div class="filter-btn" onclick="toggleFilter('city')">Filter by City</div>
+                    <div class="filter-btn" onclick="toggleFilter('phone')">Filter by Phone</div>
+                    <div class="filter-btn" onclick="toggleFilter('email')">Filter by Email</div>
+                    <input type="text" id="filterInput" class="input" placeholder="Enter filter value..." style="display: none;">
+                </div>
             </div>
             
             <div id="results" class="grid"></div>
@@ -586,11 +762,20 @@
                     <input type="text" id="name" class="input" placeholder="Full Name" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" id="email" class="input" placeholder="Email" required>
+                    <select id="gender" class="gender-select" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <input type="tel" id="phone" class="input" placeholder="Phone Number">
+                    <input type="email" id="email" class="input" placeholder="Email" required onblur="checkDuplicate('email')">
                 </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" class="input" placeholder="Phone Number" onblur="checkDuplicate('phone')">
+                </div>
+                <div id="validationMessage"></div>
                 <div class="form-group">
                     <input type="tel" id="whatsapp" class="input" placeholder="WhatsApp Number">
                 </div>
@@ -624,17 +809,75 @@
             try {
                 const querySnapshot = await window.firestore.getDocs(window.firestore.collection(window.db, 'alumni'));
                 alumni = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                displayResults(alumni);
             } catch (error) {
                 console.error('Error loading alumni:', error);
-                displayResults([]);
+                alumni = [];
             }
+        }
+        
+        let duplicateRecord = null;
+        
+        async function checkDuplicate(field) {
+            const value = document.getElementById(field).value.trim();
+            if (!value) return;
+            
+            // Load alumni if not loaded
+            if (alumni.length === 0) {
+                await loadAlumni();
+            }
+            
+            const existing = alumni.find(alum => 
+                alum[field] && alum[field].toLowerCase() === value.toLowerCase()
+            );
+            
+            const messageContainer = document.getElementById('validationMessage');
+            
+            if (existing) {
+                duplicateRecord = existing;
+                messageContainer.innerHTML = `
+                    <div class="validation-message">
+                        ⚠️ A profile already exists with this ${field}.<br>
+                        <span class="view-profile-link" onclick="viewExistingProfile()">
+                            Click here to view existing profile
+                        </span>
+                    </div>
+                `;
+            } else {
+                messageContainer.innerHTML = '';
+                duplicateRecord = null;
+            }
+        }
+        
+        function viewExistingProfile() {
+            if (!duplicateRecord) return;
+            
+            const profileHtml = `
+                <div class="validation-message">
+                    <h4>📋 Existing Profile:</h4>
+                    <p><strong>Name:</strong> ${duplicateRecord.name}</p>
+                    <p><strong>Company:</strong> ${duplicateRecord.company}</p>
+                    <p><strong>City:</strong> ${duplicateRecord.city}</p>
+                    ${duplicateRecord.email ? `<p><strong>Email:</strong> ${duplicateRecord.email}</p>` : ''}
+                    ${duplicateRecord.phone ? `<p><strong>Phone:</strong> ${duplicateRecord.phone}</p>` : ''}
+                    ${duplicateRecord.designation ? `<p><strong>Designation:</strong> ${duplicateRecord.designation}</p>` : ''}
+                </div>
+            `;
+            
+            document.getElementById('validationMessage').innerHTML = profileHtml;
         }
         
         async function addAlumni(event) {
             event.preventDefault();
+            
+            // Check for duplicates before submitting
+            if (duplicateRecord) {
+                alert('Please resolve the duplicate record issue before submitting.');
+                return;
+            }
+            
             const formData = {
                 name: document.getElementById('name').value,
+                gender: document.getElementById('gender').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 whatsapp: document.getElementById('whatsapp').value,
@@ -650,7 +893,8 @@
                 await window.firestore.addDoc(window.firestore.collection(window.db, 'alumni'), formData);
                 document.getElementById('addForm').reset();
                 hideAddForm();
-                loadAlumni();
+                alumni = []; // Reset to reload
+                showMainButtons();
             } catch (error) {
                 console.error('Error adding alumni:', error);
                 alert('Error adding alumni. Please try again.');
@@ -663,10 +907,14 @@
             btn.innerHTML = '<span class="loading"></span> Searching...';
             btn.disabled = true;
             
+            // Load alumni if not loaded
+            if (alumni.length === 0) {
+                await loadAlumni();
+            }
+            
             await new Promise(resolve => setTimeout(resolve, 800));
             
             const company = document.getElementById('searchCompany').value.toLowerCase();
-            const city = document.getElementById('searchCity').value.toLowerCase();
             
             let filtered = alumni;
             
@@ -674,11 +922,12 @@
                 filtered = filtered.filter(alum => alum.company.toLowerCase().includes(company));
             }
             
-            if (city) {
-                filtered = filtered.filter(alum => alum.city.toLowerCase().includes(city));
-            }
-            
+            searchResults = filtered;
             displayResults(filtered);
+            
+            if (filtered.length > 0) {
+                document.getElementById('filterControls').classList.add('show');
+            }
             
             btn.innerHTML = originalText;
             btn.disabled = false;
@@ -693,7 +942,7 @@
             
             container.innerHTML = results.map((alum, index) => `
                 <div class="card" style="animation-delay: ${index * 0.1}s">
-                    <h3>${alum.name}</h3>
+                    <h3>${alum.name} ${alum.gender ? `<span style="font-size: 0.8em; opacity: 0.7;">(${alum.gender})</span>` : ''}</h3>
                     <p><span style="color: #ff0000;">🏢</span> <strong>${alum.company}</strong></p>
                     <p><span style="color: #ff4444;">📍</span> ${alum.city}</p>
                     ${alum.designation ? `<p><span style="color: #ff6666;">💼</span> ${alum.designation}</p>` : ''}
@@ -712,25 +961,71 @@
         
         function hideAddForm() {
             document.getElementById('addModal').classList.remove('show');
+            document.getElementById('validationMessage').innerHTML = '';
+            duplicateRecord = null;
         }
+        
+        let currentFilter = null;
+        let searchResults = [];
         
         function openGate() {
             const welcomeScreen = document.getElementById('welcomeScreen');
             const gateContainer = document.getElementById('gateContainer');
             const mainContent = document.getElementById('mainContent');
             
-            // Hide welcome screen
             welcomeScreen.style.display = 'none';
-            
-            // Show and animate gate
             gateContainer.classList.add('opening');
             
-            // After gate animation, show main content
             setTimeout(() => {
                 gateContainer.style.display = 'none';
                 mainContent.classList.add('show');
-                loadAlumni();
             }, 2500);
+        }
+        
+        function showRegisterForm() {
+            document.getElementById('addModal').classList.add('show');
+        }
+        
+        function showSearchStep() {
+            document.getElementById('mainButtons').style.display = 'none';
+            document.getElementById('searchStep').classList.add('show');
+        }
+        
+        function showMainButtons() {
+            document.getElementById('searchStep').classList.remove('show');
+            document.getElementById('mainButtons').style.display = 'block';
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('filterControls').classList.remove('show');
+        }
+        
+        function toggleFilter(type) {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const filterInput = document.getElementById('filterInput');
+            
+            filterBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            currentFilter = type;
+            filterInput.style.display = 'block';
+            filterInput.placeholder = `Filter by ${type}...`;
+            filterInput.focus();
+            
+            filterInput.oninput = () => applyFilter();
+        }
+        
+        function applyFilter() {
+            const filterValue = document.getElementById('filterInput').value.toLowerCase();
+            if (!filterValue || !currentFilter) {
+                displayResults(searchResults);
+                return;
+            }
+            
+            const filtered = searchResults.filter(alum => {
+                const value = alum[currentFilter]?.toLowerCase() || '';
+                return value.includes(filterValue);
+            });
+            
+            displayResults(filtered);
         }
         
         // Don't load alumni on page load anymore
