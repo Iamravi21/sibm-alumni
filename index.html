@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIBM Pune Alumni Portal</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyBHM9DcOD4c8zkbPXqrFUqtnn7ZGc_FZEI",
+            authDomain: "sibm-alumni-portal.firebaseapp.com",
+            projectId: "sibm-alumni-portal",
+            storageBucket: "sibm-alumni-portal.firebasestorage.app",
+            messagingSenderId: "887268183328",
+            appId: "1:887268183328:web:90ebb9bd0e94e502ee9b45"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        window.db = getFirestore(app);
+        window.firestore = { collection, addDoc, getDocs, query, where };
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .header { text-align: center; margin-bottom: 3rem; }
+        .header h1 { font-size: 3rem; margin-bottom: 1rem; }
+        .glass { 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .search-form { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .input { 
+            background: rgba(255, 255, 255, 0.9); 
+            border: none; 
+            border-radius: 12px; 
+            padding: 12px 16px; 
+            flex: 1; 
+            min-width: 200px;
+            color: #333;
+        }
+        .btn { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            border: none; 
+            color: white; 
+            padding: 12px 24px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .card { 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem; 
+            padding: 1.5rem; 
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card h3 { margin-bottom: 0.5rem; }
+        .card p { margin-bottom: 0.5rem; opacity: 0.8; }
+        .modal { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: rgba(0,0,0,0.5); 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 1000;
+        }
+        .modal.show { display: flex; }
+        .modal-content { 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px); 
+            border-radius: 1rem; 
+            padding: 2rem; 
+            max-width: 500px; 
+            width: 90%;
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group input { width: 100%; }
+        .btn-group { display: flex; gap: 1rem; }
+        .btn-secondary { background: #6b7280; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 SIBM Pune Alumni</h1>
+            <p>Executive MBA Network</p>
+        </div>
+        
+        <div class="glass">
+            <div class="search-form">
+                <input type="text" id="searchCompany" class="input" placeholder="Search by company name...">
+                <input type="text" id="searchCity" class="input" placeholder="Filter by city...">
+                <button onclick="searchAlumni()" class="btn">🔍 Search</button>
+            </div>
+            <button onclick="showAddForm()" class="btn">➕ Add Alumni</button>
+        </div>
+        
+        <div id="results" class="grid"></div>
+    </div>
+    
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h2>Add Alumni</h2>
+            <form id="addForm" onsubmit="addAlumni(event)">
+                <div class="form-group">
+                    <input type="text" id="name" class="input" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" class="input" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" class="input" placeholder="Phone">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="company" class="input" placeholder="Company" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="position" class="input" placeholder="Position">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="city" class="input" placeholder="City" required>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="graduationYear" class="input" placeholder="Graduation Year">
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn">Add Alumni</button>
+                    <button type="button" onclick="hideAddForm()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let alumni = [];
+        
+        async function loadAlumni() {
+            try {
+                const querySnapshot = await window.firestore.getDocs(window.firestore.collection(window.db, 'alumni'));
+                alumni = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                displayResults(alumni);
+            } catch (error) {
+                console.error('Error loading alumni:', error);
+            }
+        }
+        
+        async function addAlumni(event) {
+            event.preventDefault();
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                company: document.getElementById('company').value,
+                position: document.getElementById('position').value,
+                city: document.getElementById('city').value,
+                graduationYear: document.getElementById('graduationYear').value,
+                createdAt: new Date().toISOString()
+            };
+            
+            try {
+                await window.firestore.addDoc(window.firestore.collection(window.db, 'alumni'), formData);
+                document.getElementById('addForm').reset();
+                hideAddForm();
+                loadAlumni();
+            } catch (error) {
+                console.error('Error adding alumni:', error);
+            }
+        }
+        
+        async function searchAlumni() {
+            const company = document.getElementById('searchCompany').value.toLowerCase();
+            const city = document.getElementById('searchCity').value.toLowerCase();
+            
+            let filtered = alumni;
+            
+            if (company) {
+                filtered = filtered.filter(alum => alum.company.toLowerCase().includes(company));
+            }
+            
+            if (city) {
+                filtered = filtered.filter(alum => alum.city.toLowerCase().includes(city));
+            }
+            
+            displayResults(filtered);
+        }
+        
+        function displayResults(results) {
+            const container = document.getElementById('results');
+            if (results.length === 0) {
+                container.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">No alumni found. Be the first to add your information!</p>';
+                return;
+            }
+            
+            container.innerHTML = results.map(alum => `
+                <div class="card">
+                    <h3>${alum.name}</h3>
+                    <p><strong>🏢 ${alum.company}</strong></p>
+                    <p>📍 ${alum.city}</p>
+                    ${alum.position ? `<p>💼 ${alum.position}</p>` : ''}
+                    ${alum.email ? `<p>📧 ${alum.email}</p>` : ''}
+                    ${alum.phone ? `<p>📱 ${alum.phone}</p>` : ''}
+                    ${alum.graduationYear ? `<p>🎓 Class of ${alum.graduationYear}</p>` : ''}
+                </div>
+            `).join('');
+        }
+        
+        function showAddForm() {
+            document.getElementById('addModal').classList.add('show');
+        }
+        
+        function hideAddForm() {
+            document.getElementById('addModal').classList.remove('show');
+        }
+        
+        // Load alumni on page load
+        window.addEventListener('load', loadAlumni);
+    </script>
+</body>
+</html>
