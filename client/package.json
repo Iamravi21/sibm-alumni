@@ -5,12 +5,12 @@
   "proxy": "http://localhost:5000",
   "homepage": "https://yourusername.github.io/sibm-alumni",
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
-    "framer-motion": "^10.16.4",
-    "lucide-react": "^0.292.0",
-    "firebase": "^10.5.0"
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.400.0",
+    "firebase": "^10.12.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -37,5 +37,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "ajv": "^8.12.0"
+  },
+  "overrides": {
+    "ajv": "^8.12.0"
   }
 }
