@@ -302,9 +302,10 @@
         
         .main-buttons {
             display: flex;
-            gap: 3rem;
+            gap: 2rem;
             justify-content: center;
             margin-top: 3rem;
+            flex-wrap: wrap;
         }
         
         .main-btn {
@@ -491,6 +492,56 @@
         @keyframes backBtnSlide {
             from { opacity: 0; transform: translateX(-50px); }
             to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .alphabet-filter {
+            margin: 2rem 0;
+            animation: alphabetSlide 0.8s ease-out 0.4s both;
+        }
+        
+        .alphabet-header {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ff4444;
+            margin-bottom: 1rem;
+            animation: filterHeaderGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .alphabet-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        
+        .alphabet-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 68, 68, 0.3);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            min-width: 40px;
+        }
+        
+        .alphabet-btn:hover {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+            transform: translateY(-2px) scale(1.1);
+        }
+        
+        .alphabet-btn.active {
+            background: linear-gradient(135deg, #ff0000, #ff4444);
+            border-color: #ff0000;
+            transform: scale(1.1);
+        }
+        
+        @keyframes alphabetSlide {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .gender-select {
@@ -757,6 +808,7 @@
             gap: 1.5rem; 
             margin-bottom: 2rem; 
             flex-wrap: wrap;
+            align-items: flex-end;
         }
         
         .input { 
@@ -1086,6 +1138,7 @@
                 <div class="main-buttons">
                     <button class="main-btn" onclick="showRegisterForm()">📝 Register As Alumni</button>
                     <button class="main-btn" onclick="showSearchStep()">🔍 Search Alumni</button>
+                    <button class="main-btn" onclick="showDashboard()">📈 Alumni Dashboard</button>
                 </div>
             </div>
             
@@ -1118,6 +1171,51 @@
             
             <div id="results" class="grid"></div>
         </div>
+    </div>
+    
+    <!-- Alumni Dashboard -->
+    <div id="dashboardStep" class="search-step glass" style="display: none;">
+        <button class="back-btn" onclick="showMainButtons()">← Back</button>
+        
+        <div class="search-header">
+            <h2 class="search-title">📈 Alumni Dashboard</h2>
+            <p class="search-subtitle">Browse all registered alumni</p>
+        </div>
+        
+        <div class="alphabet-filter">
+            <div class="alphabet-header">Filter by Name:</div>
+            <div class="alphabet-buttons">
+                <button class="alphabet-btn" onclick="filterByLetter('ALL')">ALL</button>
+                <button class="alphabet-btn" onclick="filterByLetter('A')">A</button>
+                <button class="alphabet-btn" onclick="filterByLetter('B')">B</button>
+                <button class="alphabet-btn" onclick="filterByLetter('C')">C</button>
+                <button class="alphabet-btn" onclick="filterByLetter('D')">D</button>
+                <button class="alphabet-btn" onclick="filterByLetter('E')">E</button>
+                <button class="alphabet-btn" onclick="filterByLetter('F')">F</button>
+                <button class="alphabet-btn" onclick="filterByLetter('G')">G</button>
+                <button class="alphabet-btn" onclick="filterByLetter('H')">H</button>
+                <button class="alphabet-btn" onclick="filterByLetter('I')">I</button>
+                <button class="alphabet-btn" onclick="filterByLetter('J')">J</button>
+                <button class="alphabet-btn" onclick="filterByLetter('K')">K</button>
+                <button class="alphabet-btn" onclick="filterByLetter('L')">L</button>
+                <button class="alphabet-btn" onclick="filterByLetter('M')">M</button>
+                <button class="alphabet-btn" onclick="filterByLetter('N')">N</button>
+                <button class="alphabet-btn" onclick="filterByLetter('O')">O</button>
+                <button class="alphabet-btn" onclick="filterByLetter('P')">P</button>
+                <button class="alphabet-btn" onclick="filterByLetter('Q')">Q</button>
+                <button class="alphabet-btn" onclick="filterByLetter('R')">R</button>
+                <button class="alphabet-btn" onclick="filterByLetter('S')">S</button>
+                <button class="alphabet-btn" onclick="filterByLetter('T')">T</button>
+                <button class="alphabet-btn" onclick="filterByLetter('U')">U</button>
+                <button class="alphabet-btn" onclick="filterByLetter('V')">V</button>
+                <button class="alphabet-btn" onclick="filterByLetter('W')">W</button>
+                <button class="alphabet-btn" onclick="filterByLetter('X')">X</button>
+                <button class="alphabet-btn" onclick="filterByLetter('Y')">Y</button>
+                <button class="alphabet-btn" onclick="filterByLetter('Z')">Z</button>
+            </div>
+        </div>
+        
+        <div id="dashboardResults" class="grid"></div>
     </div>
     
     <div id="addModal" class="modal">
@@ -1451,10 +1549,69 @@
             document.getElementById('autocompleteDropdown').classList.remove('show');
         }
         
+        function showDashboard() {
+            document.getElementById('mainButtons').style.display = 'none';
+            document.getElementById('dashboardStep').style.display = 'block';
+            loadDashboard();
+        }
+        
+        async function loadDashboard() {
+            if (alumni.length === 0) {
+                await loadAlumni();
+            }
+            
+            // Sort alumni alphabetically
+            const sortedAlumni = [...alumni].sort((a, b) => a.name.localeCompare(b.name));
+            displayDashboardResults(sortedAlumni);
+        }
+        
+        function filterByLetter(letter) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.alphabet-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            let filtered;
+            if (letter === 'ALL') {
+                filtered = [...alumni].sort((a, b) => a.name.localeCompare(b.name));
+            } else {
+                filtered = alumni.filter(alum => 
+                    alum.name.charAt(0).toUpperCase() === letter
+                ).sort((a, b) => a.name.localeCompare(b.name));
+            }
+            
+            displayDashboardResults(filtered);
+        }
+        
+        function displayDashboardResults(results) {
+            const container = document.getElementById('dashboardResults');
+            if (results.length === 0) {
+                container.innerHTML = '<div class="no-results">✨ No alumni found for this letter!</div>';
+                return;
+            }
+            
+            container.innerHTML = results.map((alum, index) => `
+                <div class="card" style="animation-delay: ${index * 0.05}s">
+                    <h3>${alum.name} ${alum.gender ? `<span style="font-size: 0.8em; opacity: 0.7;">(${alum.gender})</span>` : ''}</h3>
+                    <p><span style="color: #ff0000;">🏢</span> <strong>${alum.company}</strong></p>
+                    <p><span style="color: #ff4444;">📍</span> ${alum.city}</p>
+                    ${alum.designation ? `<p><span style="color: #ff6666;">💼</span> ${alum.designation}</p>` : ''}
+                    ${alum.email ? `<p><span style="color: #ff8888;">📧</span> ${alum.email}</p>` : ''}
+                    ${alum.phone ? `<p><span style="color: #ffaaaa;">📱</span> ${alum.phone}</p>` : ''}
+                    ${alum.whatsapp ? `<p><span style="color: #25D366;">💬</span> ${alum.whatsapp}</p>` : ''}
+                    ${alum.graduationYear ? `<p><span style="color: #ffffff;">🎓</span> Class of ${alum.graduationYear}</p>` : ''}
+                    ${alum.linkedin ? `<p><span style="color: #0077B5;">🔗</span> <a href="${formatLinkedInURL(alum.linkedin)}" target="_blank" style="color: #0077B5; text-decoration: none;">LinkedIn</a></p>` : ''}
+                </div>
+            `).join('');
+        }
+        
         function showMainButtons() {
             document.getElementById('searchStep').classList.remove('show');
+            document.getElementById('dashboardStep').style.display = 'none';
             document.getElementById('mainButtons').style.display = 'block';
             document.getElementById('results').innerHTML = '';
+            document.getElementById('dashboardResults').innerHTML = '';
             document.getElementById('filterControls').classList.remove('show');
             
             // Clear search fields
@@ -1465,6 +1622,7 @@
             
             // Reset filter buttons
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.alphabet-btn').forEach(btn => btn.classList.remove('active'));
             currentFilter = null;
         }
         
