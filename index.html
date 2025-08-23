@@ -27,7 +27,7 @@
         
         body { 
             font-family: 'Inter', sans-serif; 
-            background: #0a0a0a;
+            background: #000;
             min-height: 100vh;
             color: white;
             overflow-x: hidden;
@@ -39,9 +39,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            background: linear-gradient(135deg, #ff0000, #ff4444, #ffffff, #ff6666);
             background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            animation: gradientShift 8s ease infinite;
             z-index: -2;
         }
         
@@ -51,7 +51,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             z-index: -1;
         }
         
@@ -104,26 +104,145 @@
         }
         
         .header h1 { 
-            font-size: 4rem; 
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            font-size: 5rem; 
+            font-weight: 900;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ff0000, #ffffff, #ff4444);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: textGlow 2s ease-in-out infinite alternate;
+            animation: textGlow 3s ease-in-out infinite alternate;
+            text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
         }
         
-        .header p {
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        .welcome-message {
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: welcomeSlide 2s ease-out 1s both;
+            background: linear-gradient(135deg, #ffffff, #ff4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes welcomeSlide {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .register-btn {
+            background: linear-gradient(135deg, #ff0000, #ff4444);
+            border: none;
+            color: white;
+            padding: 20px 50px;
+            border-radius: 50px;
             font-size: 1.5rem;
-            font-weight: 300;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.3s both;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: btnAppear 1s ease-out 2s both;
+        }
+        
+        .register-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .register-btn:hover::before {
+            left: 100%;
+        }
+        
+        .register-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 25px 60px rgba(255, 0, 0, 0.6);
+        }
+        
+        @keyframes btnAppear {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .gate-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+        }
+        
+        .gate-container.opening {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .gate-left, .gate-right {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff0000, #000000);
+            transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .gate-left {
+            left: 0;
+            transform-origin: left center;
+        }
+        
+        .gate-right {
+            right: 0;
+            transform-origin: right center;
+        }
+        
+        .gate-container.opening .gate-left {
+            transform: rotateY(-90deg);
+        }
+        
+        .gate-container.opening .gate-right {
+            transform: rotateY(90deg);
+        }
+        
+        .main-content {
+            display: none;
+        }
+        
+        .main-content.show {
+            display: block;
+            animation: contentFadeIn 1s ease-out;
+        }
+        
+        @keyframes contentFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
         
         @keyframes textGlow {
-            from { filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.5)); }
-            to { filter: drop-shadow(0 0 30px rgba(78, 205, 196, 0.5)); }
+            from { filter: drop-shadow(0 0 30px rgba(255, 0, 0, 0.8)); }
+            to { filter: drop-shadow(0 0 50px rgba(255, 255, 255, 0.8)); }
         }
         
         @keyframes slideInDown {
@@ -197,13 +316,13 @@
         
         .input:focus {
             outline: none;
-            border-color: #4ecdc4;
-            box-shadow: 0 0 30px rgba(78, 205, 196, 0.3);
+            border-color: #ff4444;
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.4);
             transform: translateY(-2px);
         }
         
         .btn { 
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(135deg, #ff0000, #ff4444);
             border: none;
             color: white;
             padding: 16px 32px;
@@ -214,7 +333,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
         }
         
         .btn::before {
@@ -234,7 +353,7 @@
         
         .btn:hover { 
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.6);
         }
         
         .btn:active {
@@ -266,13 +385,13 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            background: linear-gradient(90deg, #ff0000, #ff4444, #ffffff);
         }
         
         .card:hover { 
             transform: translateY(-10px) scale(1.02);
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-            border-color: rgba(78, 205, 196, 0.5);
+            border-color: rgba(255, 68, 68, 0.5);
         }
         
         @keyframes cardSlideIn {
@@ -284,7 +403,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            color: #4ecdc4;
+            color: #ff4444;
         }
         
         .card p { 
@@ -342,7 +461,7 @@
             font-weight: 700;
             margin-bottom: 2rem;
             text-align: center;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(135deg, #ff0000, #ffffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -420,22 +539,43 @@
         <div class="shape"></div>
     </div>
     
-    <div class="container">
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="welcome-screen">
         <div class="header">
             <h1>🎓 SIBM Pune Alumni</h1>
-            <p>Executive MBA Network</p>
-        </div>
-        
-        <div class="glass">
-            <div class="search-form">
-                <input type="text" id="searchCompany" class="input" placeholder="🔍 Search by company name...">
-                <input type="text" id="searchCity" class="input" placeholder="📍 Filter by city...">
-                <button onclick="searchAlumni()" class="btn" id="searchBtn">Search Alumni</button>
+            <div class="welcome-message">
+                Welcome to the most exclusive Executive MBA network.<br>
+                Connect. Network. Grow.
             </div>
-            <button onclick="showAddForm()" class="btn">✨ Add Alumni</button>
+            <button class="register-btn" onclick="openGate()">🚪 Enter Portal</button>
         </div>
-        
-        <div id="results" class="grid"></div>
+    </div>
+    
+    <!-- Gate Animation -->
+    <div id="gateContainer" class="gate-container">
+        <div class="gate-left"></div>
+        <div class="gate-right"></div>
+    </div>
+    
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+        <div class="container">
+            <div class="header">
+                <h1>🎓 SIBM Pune Alumni</h1>
+                <p>Executive MBA Network</p>
+            </div>
+            
+            <div class="glass">
+                <div class="search-form">
+                    <input type="text" id="searchCompany" class="input" placeholder="🔍 Search by company name...">
+                    <input type="text" id="searchCity" class="input" placeholder="📍 Filter by city...">
+                    <button onclick="searchAlumni()" class="btn" id="searchBtn">Search Alumni</button>
+                </div>
+                <button onclick="showAddForm()" class="btn">✨ Add Alumni</button>
+            </div>
+            
+            <div id="results" class="grid"></div>
+        </div>
     </div>
     
     <div id="addModal" class="modal">
@@ -449,19 +589,25 @@
                     <input type="email" id="email" class="input" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                    <input type="tel" id="phone" class="input" placeholder="Phone">
+                    <input type="tel" id="phone" class="input" placeholder="Phone Number">
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="whatsapp" class="input" placeholder="WhatsApp Number">
                 </div>
                 <div class="form-group">
                     <input type="text" id="company" class="input" placeholder="Company" required>
                 </div>
                 <div class="form-group">
-                    <input type="text" id="position" class="input" placeholder="Position">
+                    <input type="text" id="designation" class="input" placeholder="Current Designation">
                 </div>
                 <div class="form-group">
                     <input type="text" id="city" class="input" placeholder="City" required>
                 </div>
                 <div class="form-group">
                     <input type="number" id="graduationYear" class="input" placeholder="Graduation Year">
+                </div>
+                <div class="form-group">
+                    <input type="url" id="linkedin" class="input" placeholder="LinkedIn Profile URL">
                 </div>
                 <div class="btn-group">
                     <button type="submit" class="btn">Add Alumni</button>
@@ -491,10 +637,12 @@
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
+                whatsapp: document.getElementById('whatsapp').value,
                 company: document.getElementById('company').value,
-                position: document.getElementById('position').value,
+                designation: document.getElementById('designation').value,
                 city: document.getElementById('city').value,
                 graduationYear: document.getElementById('graduationYear').value,
+                linkedin: document.getElementById('linkedin').value,
                 createdAt: new Date().toISOString()
             };
             
@@ -546,12 +694,14 @@
             container.innerHTML = results.map((alum, index) => `
                 <div class="card" style="animation-delay: ${index * 0.1}s">
                     <h3>${alum.name}</h3>
-                    <p><span style="color: #ff6b6b;">🏢</span> <strong>${alum.company}</strong></p>
-                    <p><span style="color: #4ecdc4;">📍</span> ${alum.city}</p>
-                    ${alum.position ? `<p><span style="color: #45b7d1;">💼</span> ${alum.position}</p>` : ''}
-                    ${alum.email ? `<p><span style="color: #96ceb4;">📧</span> ${alum.email}</p>` : ''}
-                    ${alum.phone ? `<p><span style="color: #feca57;">📱</span> ${alum.phone}</p>` : ''}
-                    ${alum.graduationYear ? `<p><span style="color: #ff9ff3;">🎓</span> Class of ${alum.graduationYear}</p>` : ''}
+                    <p><span style="color: #ff0000;">🏢</span> <strong>${alum.company}</strong></p>
+                    <p><span style="color: #ff4444;">📍</span> ${alum.city}</p>
+                    ${alum.designation ? `<p><span style="color: #ff6666;">💼</span> ${alum.designation}</p>` : ''}
+                    ${alum.email ? `<p><span style="color: #ff8888;">📧</span> ${alum.email}</p>` : ''}
+                    ${alum.phone ? `<p><span style="color: #ffaaaa;">📱</span> ${alum.phone}</p>` : ''}
+                    ${alum.whatsapp ? `<p><span style="color: #25D366;">💬</span> ${alum.whatsapp}</p>` : ''}
+                    ${alum.graduationYear ? `<p><span style="color: #ffffff;">🎓</span> Class of ${alum.graduationYear}</p>` : ''}
+                    ${alum.linkedin ? `<p><span style="color: #0077B5;">🔗</span> <a href="${alum.linkedin}" target="_blank" style="color: #0077B5; text-decoration: none;">LinkedIn</a></p>` : ''}
                 </div>
             `).join('');
         }
@@ -564,7 +714,27 @@
             document.getElementById('addModal').classList.remove('show');
         }
         
-        window.addEventListener('load', loadAlumni);
+        function openGate() {
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const gateContainer = document.getElementById('gateContainer');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Hide welcome screen
+            welcomeScreen.style.display = 'none';
+            
+            // Show and animate gate
+            gateContainer.classList.add('opening');
+            
+            // After gate animation, show main content
+            setTimeout(() => {
+                gateContainer.style.display = 'none';
+                mainContent.classList.add('show');
+                loadAlumni();
+            }, 2500);
+        }
+        
+        // Don't load alumni on page load anymore
+        // window.addEventListener('load', loadAlumni);
     </script>
 </body>
 </html>
