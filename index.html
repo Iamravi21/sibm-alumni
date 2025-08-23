@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIBM Pune Alumni Portal</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
         import { getFirestore, collection, addDoc, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
@@ -484,6 +481,7 @@
                 displayResults(alumni);
             } catch (error) {
                 console.error('Error loading alumni:', error);
+                displayResults([]);
             }
         }
         
@@ -507,6 +505,7 @@
                 loadAlumni();
             } catch (error) {
                 console.error('Error adding alumni:', error);
+                alert('Error adding alumni. Please try again.');
             }
         }
         
@@ -516,7 +515,6 @@
             btn.innerHTML = '<span class="loading"></span> Searching...';
             btn.disabled = true;
             
-            // Add delay for better UX
             await new Promise(resolve => setTimeout(resolve, 800));
             
             const company = document.getElementById('searchCompany').value.toLowerCase();
@@ -566,7 +564,6 @@
             document.getElementById('addModal').classList.remove('show');
         }
         
-        // Load alumni on page load
         window.addEventListener('load', loadAlumni);
     </script>
 </body>
