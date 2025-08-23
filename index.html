@@ -457,6 +457,139 @@
             color: #ff4444;
         }
         
+        .thank-you-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .thank-you-overlay.show {
+            display: flex;
+            animation: thankYouFadeIn 0.5s ease-out;
+        }
+        
+        @keyframes thankYouFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .thank-you-message {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 68, 68, 0.3);
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            max-width: 500px;
+            animation: thankYouBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        @keyframes thankYouBounce {
+            from { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(1.1) rotate(5deg); }
+            to { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        .thank-you-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .thank-you-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ff0000, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .thank-you-text {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .thank-you-btn {
+            background: linear-gradient(135deg, #ff0000, #ff4444);
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
+        }
+        
+        .thank-you-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.6);
+        }
+        
+        .autocomplete-container {
+            position: relative;
+            flex: 1;
+        }
+        
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            margin-top: 5px;
+        }
+        
+        .autocomplete-dropdown.show {
+            display: block;
+            animation: dropdownSlide 0.3s ease-out;
+        }
+        
+        @keyframes dropdownSlide {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .autocomplete-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .autocomplete-item:hover {
+            background: rgba(255, 68, 68, 0.2);
+        }
+        
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+        
         @keyframes textGlow {
             from { filter: drop-shadow(0 0 30px rgba(255, 0, 0, 0.8)); }
             to { filter: drop-shadow(0 0 50px rgba(255, 255, 255, 0.8)); }
@@ -807,7 +940,10 @@
             <div id="searchStep" class="search-step glass">
                 <button class="back-btn" onclick="showMainButtons()">← Back</button>
                 <div class="search-form">
-                    <input type="text" id="searchCompany" class="input" placeholder="🔍 Search by company name...">
+                    <div class="autocomplete-container">
+                        <input type="text" id="searchCompany" class="input" placeholder="🔍 Search by company name..." oninput="showAutoComplete()">
+                        <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+                    </div>
                     <button onclick="searchAlumni()" class="btn" id="searchBtn">Search Alumni</button>
                 </div>
                 
@@ -840,10 +976,10 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <input type="email" id="email" class="input" placeholder="Email" required onblur="checkDuplicate('email')">
+                    <input type="email" id="email" class="input" placeholder="Email" required onblur="checkDuplicate('email')" oninput="clearValidationIfEmpty('email')">
                 </div>
                 <div class="form-group">
-                    <input type="tel" id="phone" class="input" placeholder="Phone Number" onblur="checkDuplicate('phone')">
+                    <input type="tel" id="phone" class="input" placeholder="Phone Number" onblur="checkDuplicate('phone')" oninput="clearValidationIfEmpty('phone')">
                 </div>
                 <div id="validationMessage"></div>
                 <div class="form-group">
@@ -862,13 +998,26 @@
                     <input type="number" id="graduationYear" class="input" placeholder="Graduation Year">
                 </div>
                 <div class="form-group">
-                    <input type="url" id="linkedin" class="input" placeholder="LinkedIn Profile URL">
+                    <input type="text" id="linkedin" class="input" placeholder="LinkedIn Profile (e.g., www.linkedin.com/in/yourname)">
                 </div>
                 <div class="btn-group">
                     <button type="submit" class="btn">Add Alumni</button>
                     <button type="button" onclick="hideAddForm()" class="btn btn-secondary">Cancel</button>
                 </div>
             </form>
+        </div>
+    </div>
+    
+    <!-- Thank You Overlay -->
+    <div id="thankYouOverlay" class="thank-you-overlay">
+        <div class="thank-you-message">
+            <div class="thank-you-icon">🎉</div>
+            <h2 class="thank-you-title">Thank You!</h2>
+            <p class="thank-you-text">
+                Welcome to the SIBM Pune Alumni Network!<br>
+                Your registration has been successfully completed.
+            </p>
+            <button class="thank-you-btn" onclick="closeThankYou()">Continue</button>
         </div>
     </div>
 
@@ -886,6 +1035,14 @@
         }
         
         let duplicateRecord = null;
+        
+        function clearValidationIfEmpty(field) {
+            const value = document.getElementById(field).value.trim();
+            if (!value) {
+                document.getElementById('validationMessage').innerHTML = '';
+                duplicateRecord = null;
+            }
+        }
         
         async function checkDuplicate(field) {
             const value = document.getElementById(field).value.trim();
@@ -964,7 +1121,7 @@
                 document.getElementById('addForm').reset();
                 hideAddForm();
                 alumni = []; // Reset to reload
-                showMainButtons();
+                showThankYou();
             } catch (error) {
                 console.error('Error adding alumni:', error);
                 alert('Error adding alumni. Please try again.');
@@ -1020,7 +1177,7 @@
                     ${alum.phone ? `<p><span style="color: #ffaaaa;">📱</span> ${alum.phone}</p>` : ''}
                     ${alum.whatsapp ? `<p><span style="color: #25D366;">💬</span> ${alum.whatsapp}</p>` : ''}
                     ${alum.graduationYear ? `<p><span style="color: #ffffff;">🎓</span> Class of ${alum.graduationYear}</p>` : ''}
-                    ${alum.linkedin ? `<p><span style="color: #0077B5;">🔗</span> <a href="${alum.linkedin}" target="_blank" style="color: #0077B5; text-decoration: none;">LinkedIn</a></p>` : ''}
+                    ${alum.linkedin ? `<p><span style="color: #0077B5;">🔗</span> <a href="${formatLinkedInURL(alum.linkedin)}" target="_blank" style="color: #0077B5; text-decoration: none;">LinkedIn</a></p>` : ''}
                 </div>
             `).join('');
         }
@@ -1035,8 +1192,44 @@
             duplicateRecord = null;
         }
         
+        function showThankYou() {
+            document.getElementById('thankYouOverlay').classList.add('show');
+        }
+        
+        function closeThankYou() {
+            document.getElementById('thankYouOverlay').classList.remove('show');
+            showMainButtons();
+        }
+        
         let currentFilter = null;
         let searchResults = [];
+        
+        function formatLinkedInURL(url) {
+            if (!url) return '';
+            
+            // If already starts with http/https, return as is
+            if (url.startsWith('http://') || url.startsWith('https://')) {
+                return url;
+            }
+            
+            // If starts with www, add https
+            if (url.startsWith('www.')) {
+                return 'https://' + url;
+            }
+            
+            // If just linkedin.com/in/username, add https://www.
+            if (url.startsWith('linkedin.com')) {
+                return 'https://www.' + url;
+            }
+            
+            // If just username or partial path, create full LinkedIn URL
+            if (!url.includes('linkedin.com')) {
+                return 'https://www.linkedin.com/in/' + url;
+            }
+            
+            // Default: add https://www. if nothing else matches
+            return 'https://www.' + url;
+        }
         
         function openGate() {
             const welcomeScreen = document.getElementById('welcomeScreen');
@@ -1061,11 +1254,58 @@
             document.getElementById('searchStep').classList.add('show');
         }
         
+        async function showAutoComplete() {
+            const input = document.getElementById('searchCompany');
+            const dropdown = document.getElementById('autocompleteDropdown');
+            const query = input.value.trim();
+            
+            if (query.length < 3) {
+                dropdown.classList.remove('show');
+                return;
+            }
+            
+            // Load alumni if not loaded
+            if (alumni.length === 0) {
+                await loadAlumni();
+            }
+            
+            // Get unique companies that match the query
+            const companies = [...new Set(alumni.map(alum => alum.company))]
+                .filter(company => company.toLowerCase().includes(query.toLowerCase()))
+                .slice(0, 5); // Show max 5 suggestions
+            
+            if (companies.length === 0) {
+                dropdown.classList.remove('show');
+                return;
+            }
+            
+            dropdown.innerHTML = companies.map(company => 
+                `<div class="autocomplete-item" onclick="selectCompany('${company}')">${company}</div>`
+            ).join('');
+            
+            dropdown.classList.add('show');
+        }
+        
+        function selectCompany(company) {
+            document.getElementById('searchCompany').value = company;
+            document.getElementById('autocompleteDropdown').classList.remove('show');
+        }
+        
         function showMainButtons() {
             document.getElementById('searchStep').classList.remove('show');
             document.getElementById('mainButtons').style.display = 'block';
             document.getElementById('results').innerHTML = '';
             document.getElementById('filterControls').classList.remove('show');
+            
+            // Clear search fields
+            document.getElementById('searchCompany').value = '';
+            document.getElementById('filterInput').value = '';
+            document.getElementById('filterInput').style.display = 'none';
+            document.getElementById('autocompleteDropdown').classList.remove('show');
+            
+            // Reset filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            currentFilter = null;
         }
         
         function toggleFilter(type) {
@@ -1097,6 +1337,16 @@
             
             displayResults(filtered);
         }
+        
+        // Close autocomplete when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            const input = document.getElementById('searchCompany');
+            
+            if (dropdown && !dropdown.contains(event.target) && event.target !== input) {
+                dropdown.classList.remove('show');
+            }
+        });
         
         // Don't load alumni on page load anymore
         // window.addEventListener('load', loadAlumni);
