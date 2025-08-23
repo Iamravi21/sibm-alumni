@@ -31,6 +31,7 @@
             min-height: 100vh;
             color: white;
             overflow-x: hidden;
+            padding-bottom: 60px;
         }
         
         .bg-animation {
@@ -93,7 +94,7 @@
         .container { 
             max-width: 1400px; 
             margin: 0 auto; 
-            padding: 2rem;
+            padding: 2rem 2rem 4rem 2rem;
             position: relative;
         }
         
@@ -120,8 +121,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            min-height: calc(100vh - 60px);
             text-align: center;
+            padding-bottom: 60px;
         }
         
         .welcome-images {
@@ -350,6 +352,53 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        .search-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: searchHeaderSlide 0.8s ease-out;
+        }
+        
+        .search-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ff0000, #ffffff, #ff4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+        
+        .search-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            animation: subtitleFloat 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes searchHeaderSlide {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes titlePulse {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.5)); }
+            50% { filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.8)); }
+        }
+        
+        @keyframes subtitleFloat {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-5px); }
+        }
+        
+        .search-form {
+            animation: searchFormSlide 0.8s ease-out 0.3s both;
+        }
+        
+        @keyframes searchFormSlide {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
         .filter-controls {
             display: none;
             margin-top: 2rem;
@@ -365,6 +414,21 @@
         @keyframes filterSlideIn {
             from { opacity: 0; transform: translateX(-30px); }
             to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .filter-header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ff4444;
+            animation: filterHeaderGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes filterHeaderGlow {
+            from { text-shadow: 0 0 10px rgba(255, 68, 68, 0.5); }
+            to { text-shadow: 0 0 20px rgba(255, 68, 68, 0.8); }
         }
         
         .filter-btn {
@@ -398,11 +462,35 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            animation: backBtnSlide 0.6s ease-out;
+        }
+        
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .back-btn:hover::before {
+            left: 100%;
         }
         
         .back-btn:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+        }
+        
+        @keyframes backBtnSlide {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
         .gender-select {
@@ -434,10 +522,12 @@
             border: 1px solid rgba(255, 0, 0, 0.3);
             border-radius: 12px;
             padding: 15px;
-            margin: 10px 0;
+            margin: 10px 0 20px 0;
             color: #ff4444;
             font-weight: 500;
             animation: validationSlide 0.3s ease-out;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         @keyframes validationSlide {
@@ -560,7 +650,7 @@
             border-radius: 12px;
             max-height: 200px;
             overflow-y: auto;
-            z-index: 1000;
+            z-index: 1001;
             display: none;
             margin-top: 5px;
         }
@@ -634,11 +724,11 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
             padding: 3rem;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
             animation: slideInUp 1s ease-out 0.5s both;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
         }
         
         .glass::before {
@@ -737,6 +827,8 @@
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
             gap: 2rem;
+            margin-bottom: 4rem;
+            padding-bottom: 2rem;
         }
         
         .card { 
@@ -749,6 +841,29 @@
             position: relative;
             overflow: hidden;
             animation: cardSlideIn 0.6s ease-out;
+        }
+        
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+        
+        .card:hover::after {
+            animation: cardShimmer 1.5s ease-in-out;
+        }
+        
+        @keyframes cardShimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
         }
         
         .card::before {
@@ -777,6 +892,9 @@
             font-weight: 700;
             margin-bottom: 1rem;
             color: #ff4444;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.3;
         }
         
         .card p { 
@@ -786,6 +904,8 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         .modal { 
@@ -820,10 +940,11 @@
             padding: 2rem;
             max-width: 500px;
             width: 90%;
-            max-height: 80vh;
+            max-height: 75vh;
             overflow-y: auto;
             animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2rem;
         }
         
         @keyframes modalSlideIn {
@@ -885,7 +1006,16 @@
             padding: 4rem 2rem;
             font-size: 1.2rem;
             opacity: 0.8;
-            animation: fadeIn 0.5s ease-out;
+            animation: noResultsBounce 1s ease-out;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 2px dashed rgba(255, 68, 68, 0.3);
+        }
+        
+        @keyframes noResultsBounce {
+            0% { opacity: 0; transform: scale(0.5) rotate(-5deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+            100% { opacity: 0.8; transform: scale(1) rotate(0deg); }
         }
         
         @keyframes fadeIn {
@@ -962,6 +1092,12 @@
             <!-- Search Step -->
             <div id="searchStep" class="search-step glass">
                 <button class="back-btn" onclick="showMainButtons()">← Back</button>
+                
+                <div class="search-header">
+                    <h2 class="search-title">🔍 Find Alumni</h2>
+                    <p class="search-subtitle">Discover your network connections</p>
+                </div>
+                
                 <div class="search-form">
                     <div class="autocomplete-container">
                         <input type="text" id="searchCompany" class="input" placeholder="🔍 Search by company name..." oninput="showAutoComplete()">
@@ -971,6 +1107,7 @@
                 </div>
                 
                 <div id="filterControls" class="filter-controls">
+                    <div class="filter-header">✨ Refine Your Search</div>
                     <div class="filter-btn" onclick="toggleFilter('city')">Filter by City</div>
                     <div class="filter-btn" onclick="toggleFilter('phone')">Filter by Phone</div>
                     <div class="filter-btn" onclick="toggleFilter('email')">Filter by Email</div>
