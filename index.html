@@ -1665,7 +1665,7 @@
             let filtered = alumni;
             
             if (company) {
-                filtered = filtered.filter(alum => alum.company.toLowerCase().includes(company));
+                filtered = filtered.filter(alum => alum.company && alum.company.toLowerCase().includes(company));
             }
             
             searchResults = filtered;
@@ -1677,6 +1677,35 @@
             
             btn.innerHTML = originalText;
             btn.disabled = false;
+        }
+        
+        async function browseByLetter(letter) {
+            // Load alumni if not loaded
+            if (alumni.length === 0) {
+                await loadAlumni();
+            }
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.alphabet-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            let filtered;
+            if (letter === 'ALL') {
+                filtered = [...alumni].sort((a, b) => a.name.localeCompare(b.name));
+            } else {
+                filtered = alumni.filter(alum => 
+                    alum.name && alum.name.charAt(0).toUpperCase() === letter
+                ).sort((a, b) => a.name.localeCompare(b.name));
+            }
+            
+            searchResults = filtered;
+            displayResults(filtered);
+            
+            if (filtered.length > 0) {
+                document.getElementById('filterControls').classList.add('show');
+            }
         }
         
         function displayResults(results) {
@@ -1769,9 +1798,29 @@
             document.getElementById('addModal').classList.add('show');
         }
         
-        function showSearchStep() {
+        // Ensure form submission works
+        document.addEventListener('DOMContentLoaded', function() {
+            const addForm = document.getElementById('addForm');
+            if (addForm) {
+                addForm.addEventListener('submit', addAlumni);
+            }
+        });
+        
+        async function showSearchStep() {
             document.getElementById('mainButtons').style.display = 'none';
             document.getElementById('searchStep').classList.add('show');
+            
+            // Load and display all alumni when search page opens
+            if (alumni.length === 0) {
+                await loadAlumni();
+            }
+            
+            // Show all alumni initially
+            if (alumni.length > 0) {
+                searchResults = [...alumni].sort((a, b) => a.name.localeCompare(b.name));
+                displayResults(searchResults);
+                document.getElementById('filterControls').classList.add('show');
+            }
         }
         
         async function showAutoComplete() {
@@ -1790,7 +1839,7 @@
             }
             
             // Get unique companies that match the query
-            const companies = [...new Set(alumni.map(alum => alum.company))]
+            const companies = [...new Set(alumni.map(alum => alum.company).filter(c => c))]
                 .filter(company => company.toLowerCase().includes(query.toLowerCase()))
                 .slice(0, 5); // Show max 5 suggestions
             
@@ -1811,24 +1860,7 @@
             document.getElementById('autocompleteDropdown').classList.remove('show');
         }
         
-        function browseByLetter(letter) {
-            // Remove active class from all buttons
-            document.querySelectorAll('.alphabet-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            event.target.classList.add('active');
-            
-            let filtered;
-            if (letter === 'ALL') {
-                filtered = [...alumni].sort((a, b) => a.name.localeCompare(b.name));
-            } else {
-                filtered = alumni.filter(alum => 
-                    alum.name.charAt(0).toUpperCase() === letter
-                ).sort((a, b) => a.name.localeCompare(b.name));
-            }
-            
-            displayResults(filtered);
-        }
+
         
         async function showDashboard() {
             document.getElementById('mainButtons').style.display = 'none';
