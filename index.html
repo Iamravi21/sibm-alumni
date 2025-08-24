@@ -558,6 +558,43 @@
             margin-bottom: 3rem;
         }
         
+        .admin-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .admin-btn:hover {
+            background: rgba(255, 68, 68, 0.2);
+            border-color: #ff4444;
+        }
+        
+        .edit-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        
         .analytics-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
@@ -1211,7 +1248,8 @@
                 Welcome to the most exclusive Executive MBA Alumni network.<br>
                 Connect. Network. Grow.
             </div>
-            <button class="register-btn" onclick="openGate()">🚪 Enter Portal</button>
+            <button class="register-btn" onclick="showPinVerification()">🚪 Enter Portal</button>
+            <button class="admin-btn" onclick="showAdminLogin()">🔐 Admin</button>
         </div>
     </div>
     
@@ -1325,10 +1363,6 @@
                 <div class="analytics-number" id="totalCities">0</div>
                 <div class="analytics-label">Cities</div>
             </div>
-            <div class="analytics-card">
-                <div class="analytics-number" id="avgGradYear">-</div>
-                <div class="analytics-label">Avg Grad Year</div>
-            </div>
         </div>
         
         <!-- Charts -->
@@ -1350,13 +1384,6 @@
             <div class="chart-title">🎓 Graduation Years</div>
             <div class="chart-wrapper">
                 <canvas id="yearChart"></canvas>
-            </div>
-        </div>
-        
-        <div class="chart-container">
-            <div class="chart-title">👥 Gender Distribution</div>
-            <div class="chart-wrapper">
-                <canvas id="genderChart"></canvas>
             </div>
         </div>
     </div>
@@ -1409,6 +1436,88 @@
         </div>
     </div>
     
+    <!-- PIN Verification Modal -->
+    <div id="pinModal" class="modal">
+        <div class="modal-content">
+            <h2>🔐 Portal Access</h2>
+            <p style="text-align: center; margin-bottom: 2rem; opacity: 0.9;">Enter PIN to access SIBM Alumni Portal</p>
+            <form id="pinForm" onsubmit="verifyPin(event)">
+                <div class="form-group">
+                    <input type="password" id="pinInput" class="input" placeholder="Enter PIN" required style="text-align: center; font-size: 1.2rem; letter-spacing: 2px;">
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn">Enter Portal</button>
+                    <button type="button" onclick="hidePinVerification()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Admin Login Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <h2>Admin Login</h2>
+            <form id="adminForm" onsubmit="adminLogin(event)">
+                <div class="form-group">
+                    <input type="password" id="adminPassword" class="input" placeholder="Admin Password" required>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn">Login</button>
+                    <button type="button" onclick="hideAdminLogin()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Edit Alumni Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Alumni</h2>
+            <form id="editForm" onsubmit="updateAlumni(event)">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <input type="text" id="editName" class="input" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <select id="editGender" class="gender-select" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="editEmail" class="input" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="editPhone" class="input" placeholder="Phone Number">
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="editWhatsapp" class="input" placeholder="WhatsApp Number">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="editCompany" class="input" placeholder="Company" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="editDesignation" class="input" placeholder="Current Designation">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="editCity" class="input" placeholder="City" required>
+                </div>
+                <div class="form-group">
+                    <input type="number" id="editGraduationYear" class="input" placeholder="Graduation Year">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="editLinkedin" class="input" placeholder="LinkedIn Profile">
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn">Update Alumni</button>
+                    <button type="button" onclick="hideEditForm()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <!-- Thank You Overlay -->
     <div id="thankYouOverlay" class="thank-you-overlay">
         <div class="thank-you-message">
@@ -1424,6 +1533,9 @@
 
     <script>
         let alumni = [];
+        let isAdmin = false;
+        const ADMIN_PASSWORD = 'sibm2024';
+        const PORTAL_PIN = 'SIBMEXE';
         
         async function loadAlumni() {
             try {
@@ -1579,6 +1691,7 @@
                     ${alum.whatsapp ? `<p><span style="color: #25D366;">💬</span> ${alum.whatsapp}</p>` : ''}
                     ${alum.graduationYear ? `<p><span style="color: #ffffff;">🎓</span> Class of ${alum.graduationYear}</p>` : ''}
                     ${alum.linkedin ? `<p><span style="color: #0077B5;">🔗</span> <a href="${formatLinkedInURL(alum.linkedin)}" target="_blank" style="color: #0077B5; text-decoration: none;">LinkedIn</a></p>` : ''}
+                    ${isAdmin ? `<button class="edit-btn" onclick="editAlumni('${alum.id}')">✏️ Edit</button>` : ''}
                 </div>
             `).join('');
         }
@@ -1726,20 +1839,16 @@
             const totalAlumni = alumni.length;
             const companies = [...new Set(alumni.map(a => a.company).filter(c => c))];
             const cities = [...new Set(alumni.map(a => a.city).filter(c => c))];
-            const years = alumni.map(a => parseInt(a.graduationYear)).filter(y => !isNaN(y));
-            const avgYear = years.length > 0 ? Math.round(years.reduce((a, b) => a + b, 0) / years.length) : '-';
             
             // Update metrics
             document.getElementById('totalAlumni').textContent = totalAlumni;
             document.getElementById('totalCompanies').textContent = companies.length;
             document.getElementById('totalCities').textContent = cities.length;
-            document.getElementById('avgGradYear').textContent = avgYear;
             
             // Create charts
             createCompanyChart();
             createCityChart();
             createYearChart();
-            createGenderChart();
         }
         
         function createCompanyChart() {
@@ -1875,36 +1984,116 @@
             });
         }
         
-        function createGenderChart() {
-            const ctx = document.getElementById('genderChart').getContext('2d');
-            const genderCounts = {};
-            alumni.forEach(alum => {
-                const gender = alum.gender || 'Not Specified';
-                genderCounts[gender] = (genderCounts[gender] || 0) + 1;
-            });
+        function showPinVerification() {
+            document.getElementById('pinModal').classList.add('show');
+        }
+        
+        function hidePinVerification() {
+            document.getElementById('pinModal').classList.remove('show');
+            document.getElementById('pinInput').value = '';
+        }
+        
+        function verifyPin(event) {
+            event.preventDefault();
+            const pin = document.getElementById('pinInput').value.toUpperCase();
             
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: Object.keys(genderCounts),
-                    datasets: [{
-                        data: Object.values(genderCounts),
-                        backgroundColor: ['#ff0000', '#ff4444', '#ff8888', '#ffcccc'],
-                        borderWidth: 2,
-                        borderColor: '#000'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: 'white' }
-                        }
-                    }
+            if (pin === PORTAL_PIN) {
+                hidePinVerification();
+                openGate();
+            } else {
+                alert('Invalid PIN! Access denied.');
+                document.getElementById('pinInput').value = '';
+            }
+        }
+        
+        function showAdminLogin() {
+            document.getElementById('adminModal').classList.add('show');
+        }
+        
+        function hideAdminLogin() {
+            document.getElementById('adminModal').classList.remove('show');
+            document.getElementById('adminPassword').value = '';
+        }
+        
+        function adminLogin(event) {
+            event.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                hideAdminLogin();
+                alert('Admin login successful!');
+                // Refresh current view if showing results
+                if (document.getElementById('results').innerHTML) {
+                    const currentResults = searchResults.length > 0 ? searchResults : alumni;
+                    displayResults(currentResults);
                 }
-            });
+            } else {
+                alert('Invalid password!');
+            }
+        }
+        
+        function editAlumni(id) {
+            const alum = alumni.find(a => a.id === id);
+            if (!alum) return;
+            
+            document.getElementById('editId').value = id;
+            document.getElementById('editName').value = alum.name || '';
+            document.getElementById('editGender').value = alum.gender || '';
+            document.getElementById('editEmail').value = alum.email || '';
+            document.getElementById('editPhone').value = alum.phone || '';
+            document.getElementById('editWhatsapp').value = alum.whatsapp || '';
+            document.getElementById('editCompany').value = alum.company || '';
+            document.getElementById('editDesignation').value = alum.designation || '';
+            document.getElementById('editCity').value = alum.city || '';
+            document.getElementById('editGraduationYear').value = alum.graduationYear || '';
+            document.getElementById('editLinkedin').value = alum.linkedin || '';
+            
+            document.getElementById('editModal').classList.add('show');
+        }
+        
+        function hideEditForm() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+        
+        async function updateAlumni(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById('editId').value;
+            const updatedData = {
+                name: document.getElementById('editName').value,
+                gender: document.getElementById('editGender').value,
+                email: document.getElementById('editEmail').value,
+                phone: document.getElementById('editPhone').value,
+                whatsapp: document.getElementById('editWhatsapp').value,
+                company: document.getElementById('editCompany').value,
+                designation: document.getElementById('editDesignation').value,
+                city: document.getElementById('editCity').value,
+                graduationYear: document.getElementById('editGraduationYear').value,
+                linkedin: document.getElementById('editLinkedin').value,
+                updatedAt: new Date().toISOString()
+            };
+            
+            try {
+                await window.firestore.updateDoc(window.firestore.doc(window.db, 'alumni', id), updatedData);
+                
+                // Update local alumni array
+                const index = alumni.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    alumni[index] = { ...alumni[index], ...updatedData };
+                }
+                
+                hideEditForm();
+                alert('Alumni updated successfully!');
+                
+                // Refresh current view
+                const currentResults = searchResults.length > 0 ? searchResults : alumni;
+                displayResults(currentResults);
+                
+            } catch (error) {
+                console.error('Error updating alumni:', error);
+                alert('Error updating alumni. Please try again.');
+            }
         }
         
         function showMainButtons() {
@@ -1966,8 +2155,10 @@
             }
         });
         
-        // Don't load alumni on page load anymore
-        // window.addEventListener('load', loadAlumni);
+        // Import updateDoc for editing
+        import { updateDoc, doc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+        window.firestore.updateDoc = updateDoc;
+        window.firestore.doc = doc;
     </script>
     
     <!-- Footer -->
