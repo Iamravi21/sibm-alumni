@@ -1431,11 +1431,145 @@
                     <input type="email" id="email" class="input" placeholder="Email" required onblur="checkDuplicate('email')" oninput="clearValidationIfEmpty('email')">
                 </div>
                 <div class="form-group">
-                    <input type="tel" id="phone" class="input" placeholder="Phone Number" onblur="checkDuplicate('phone')" oninput="clearValidationIfEmpty('phone')">
+                    <div style="display: flex; gap: 10px;">
+                        <select id="phoneCountry" class="gender-select" style="width: 120px;">
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+971">🇦🇪 +971</option>
+                            <option value="+65">🇸🇬 +65</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+49">🇩🇪 +49</option>
+                            <option value="+33">🇫🇷 +33</option>
+                            <option value="+81">🇯🇵 +81</option>
+                            <option value="+86">🇨🇳 +86</option>
+                            <option value="+7">🇷🇺 +7</option>
+                            <option value="+82">🇰🇷 +82</option>
+                            <option value="+55">🇧🇷 +55</option>
+                            <option value="+52">🇲🇽 +52</option>
+                            <option value="+39">🇮🇹 +39</option>
+                            <option value="+34">🇪🇸 +34</option>
+                            <option value="+31">🇳🇱 +31</option>
+                            <option value="+41">🇨🇭 +41</option>
+                            <option value="+46">🇸🇪 +46</option>
+                            <option value="+47">🇳🇴 +47</option>
+                            <option value="+45">🇩🇰 +45</option>
+                            <option value="+358">🇫🇮 +358</option>
+                            <option value="+43">🇦🇹 +43</option>
+                            <option value="+32">🇧🇪 +32</option>
+                            <option value="+351">🇵🇹 +351</option>
+                            <option value="+30">🇬🇷 +30</option>
+                            <option value="+48">🇵🇱 +48</option>
+                            <option value="+420">🇨🇿 +420</option>
+                            <option value="+36">🇭🇺 +36</option>
+                            <option value="+40">🇷🇴 +40</option>
+                            <option value="+90">🇹🇷 +90</option>
+                            <option value="+972">🇮🇱 +972</option>
+                            <option value="+966">🇸🇦 +966</option>
+                            <option value="+974">🇶🇦 +974</option>
+                            <option value="+965">🇰🇼 +965</option>
+                            <option value="+968">🇴🇲 +968</option>
+                            <option value="+973">🇧🇭 +973</option>
+                            <option value="+60">🇲🇾 +60</option>
+                            <option value="+66">🇹🇭 +66</option>
+                            <option value="+62">🇮🇩 +62</option>
+                            <option value="+63">🇵🇭 +63</option>
+                            <option value="+84">🇻🇳 +84</option>
+                            <option value="+880">🇧🇩 +880</option>
+                            <option value="+94">🇱🇰 +94</option>
+                            <option value="+977">🇳🇵 +977</option>
+                            <option value="+92">🇵🇰 +92</option>
+                            <option value="+98">🇮🇷 +98</option>
+                            <option value="+964">🇮🇶 +964</option>
+                            <option value="+962">🇯🇴 +962</option>
+                            <option value="+961">🇱🇧 +961</option>
+                            <option value="+963">🇸🇾 +963</option>
+                            <option value="+20">🇪🇬 +20</option>
+                            <option value="+27">🇿🇦 +27</option>
+                            <option value="+234">🇳🇬 +234</option>
+                            <option value="+254">🇰🇪 +254</option>
+                            <option value="+233">🇬🇭 +233</option>
+                            <option value="+212">🇲🇦 +212</option>
+                            <option value="+213">🇩🇿 +213</option>
+                            <option value="+216">🇹🇳 +216</option>
+                            <option value="+218">🇱🇾 +218</option>
+                            <option value="+251">🇪🇹 +251</option>
+                            <option value="+256">🇺🇬 +256</option>
+                            <option value="+255">🇹🇿 +255</option>
+                        </select>
+                        <input type="tel" id="phone" class="input" placeholder="Phone Number (min 10 digits)" onblur="validateAndCheckDuplicate('phone')" oninput="clearValidationIfEmpty('phone')" style="flex: 1;">
+                    </div>
                 </div>
                 <div id="validationMessage"></div>
                 <div class="form-group">
-                    <input type="tel" id="whatsapp" class="input" placeholder="WhatsApp Number">
+                    <div style="display: flex; gap: 10px;">
+                        <select id="whatsappCountry" class="gender-select" style="width: 120px;">
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+971">🇦🇪 +971</option>
+                            <option value="+65">🇸🇬 +65</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+49">🇩🇪 +49</option>
+                            <option value="+33">🇫🇷 +33</option>
+                            <option value="+81">🇯🇵 +81</option>
+                            <option value="+86">🇨🇳 +86</option>
+                            <option value="+7">🇷🇺 +7</option>
+                            <option value="+82">🇰🇷 +82</option>
+                            <option value="+55">🇧🇷 +55</option>
+                            <option value="+52">🇲🇽 +52</option>
+                            <option value="+39">🇮🇹 +39</option>
+                            <option value="+34">🇪🇸 +34</option>
+                            <option value="+31">🇳🇱 +31</option>
+                            <option value="+41">🇨🇭 +41</option>
+                            <option value="+46">🇸🇪 +46</option>
+                            <option value="+47">🇳🇴 +47</option>
+                            <option value="+45">🇩🇰 +45</option>
+                            <option value="+358">🇫🇮 +358</option>
+                            <option value="+43">🇦🇹 +43</option>
+                            <option value="+32">🇧🇪 +32</option>
+                            <option value="+351">🇵🇹 +351</option>
+                            <option value="+30">🇬🇷 +30</option>
+                            <option value="+48">🇵🇱 +48</option>
+                            <option value="+420">🇨🇿 +420</option>
+                            <option value="+36">🇭🇺 +36</option>
+                            <option value="+40">🇷🇴 +40</option>
+                            <option value="+90">🇹🇷 +90</option>
+                            <option value="+972">🇮🇱 +972</option>
+                            <option value="+966">🇸🇦 +966</option>
+                            <option value="+974">🇶🇦 +974</option>
+                            <option value="+965">🇰🇼 +965</option>
+                            <option value="+968">🇴🇲 +968</option>
+                            <option value="+973">🇧🇭 +973</option>
+                            <option value="+60">🇲🇾 +60</option>
+                            <option value="+66">🇹🇭 +66</option>
+                            <option value="+62">🇮🇩 +62</option>
+                            <option value="+63">🇵🇭 +63</option>
+                            <option value="+84">🇻🇳 +84</option>
+                            <option value="+880">🇧🇩 +880</option>
+                            <option value="+94">🇱🇰 +94</option>
+                            <option value="+977">🇳🇵 +977</option>
+                            <option value="+92">🇵🇰 +92</option>
+                            <option value="+98">🇮🇷 +98</option>
+                            <option value="+964">🇮🇶 +964</option>
+                            <option value="+962">🇯🇴 +962</option>
+                            <option value="+961">🇱🇧 +961</option>
+                            <option value="+963">🇸🇾 +963</option>
+                            <option value="+20">🇪🇬 +20</option>
+                            <option value="+27">🇿🇦 +27</option>
+                            <option value="+234">🇳🇬 +234</option>
+                            <option value="+254">🇰🇪 +254</option>
+                            <option value="+233">🇬🇭 +233</option>
+                            <option value="+212">🇲🇦 +212</option>
+                            <option value="+213">🇩🇿 +213</option>
+                            <option value="+216">🇹🇳 +216</option>
+                            <option value="+218">🇱🇾 +218</option>
+                            <option value="+251">🇪🇹 +251</option>
+                            <option value="+256">🇺🇬 +256</option>
+                            <option value="+255">🇹🇿 +255</option>
+                        </select>
+                        <input type="tel" id="whatsapp" class="input" placeholder="WhatsApp Number (min 10 digits)" onblur="validatePhone('whatsapp')" style="flex: 1;">
+                    </div>
                 </div>
                 <div class="form-group">
                     <input type="text" id="company" class="input" placeholder="Company" required>
@@ -1514,10 +1648,144 @@
                     <input type="email" id="editEmail" class="input" placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                    <input type="tel" id="editPhone" class="input" placeholder="Phone Number">
+                    <div style="display: flex; gap: 10px;">
+                        <select id="editPhoneCountry" class="gender-select" style="width: 120px;">
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+971">🇦🇪 +971</option>
+                            <option value="+65">🇸🇬 +65</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+49">🇩🇪 +49</option>
+                            <option value="+33">🇫🇷 +33</option>
+                            <option value="+81">🇯🇵 +81</option>
+                            <option value="+86">🇨🇳 +86</option>
+                            <option value="+7">🇷🇺 +7</option>
+                            <option value="+82">🇰🇷 +82</option>
+                            <option value="+55">🇧🇷 +55</option>
+                            <option value="+52">🇲🇽 +52</option>
+                            <option value="+39">🇮🇹 +39</option>
+                            <option value="+34">🇪🇸 +34</option>
+                            <option value="+31">🇳🇱 +31</option>
+                            <option value="+41">🇨🇭 +41</option>
+                            <option value="+46">🇸🇪 +46</option>
+                            <option value="+47">🇳🇴 +47</option>
+                            <option value="+45">🇩🇰 +45</option>
+                            <option value="+358">🇫🇮 +358</option>
+                            <option value="+43">🇦🇹 +43</option>
+                            <option value="+32">🇧🇪 +32</option>
+                            <option value="+351">🇵🇹 +351</option>
+                            <option value="+30">🇬🇷 +30</option>
+                            <option value="+48">🇵🇱 +48</option>
+                            <option value="+420">🇨🇿 +420</option>
+                            <option value="+36">🇭🇺 +36</option>
+                            <option value="+40">🇷🇴 +40</option>
+                            <option value="+90">🇹🇷 +90</option>
+                            <option value="+972">🇮🇱 +972</option>
+                            <option value="+966">🇸🇦 +966</option>
+                            <option value="+974">🇶🇦 +974</option>
+                            <option value="+965">🇰🇼 +965</option>
+                            <option value="+968">🇴🇲 +968</option>
+                            <option value="+973">🇧🇭 +973</option>
+                            <option value="+60">🇲🇾 +60</option>
+                            <option value="+66">🇹🇭 +66</option>
+                            <option value="+62">🇮🇩 +62</option>
+                            <option value="+63">🇵🇭 +63</option>
+                            <option value="+84">🇻🇳 +84</option>
+                            <option value="+880">🇧🇩 +880</option>
+                            <option value="+94">🇱🇰 +94</option>
+                            <option value="+977">🇳🇵 +977</option>
+                            <option value="+92">🇵🇰 +92</option>
+                            <option value="+98">🇮🇷 +98</option>
+                            <option value="+964">🇮🇶 +964</option>
+                            <option value="+962">🇯🇴 +962</option>
+                            <option value="+961">🇱🇧 +961</option>
+                            <option value="+963">🇸🇾 +963</option>
+                            <option value="+20">🇪🇬 +20</option>
+                            <option value="+27">🇿🇦 +27</option>
+                            <option value="+234">🇳🇬 +234</option>
+                            <option value="+254">🇰🇪 +254</option>
+                            <option value="+233">🇬🇭 +233</option>
+                            <option value="+212">🇲🇦 +212</option>
+                            <option value="+213">🇩🇿 +213</option>
+                            <option value="+216">🇹🇳 +216</option>
+                            <option value="+218">🇱🇾 +218</option>
+                            <option value="+251">🇪🇹 +251</option>
+                            <option value="+256">🇺🇬 +256</option>
+                            <option value="+255">🇹🇿 +255</option>
+                        </select>
+                        <input type="tel" id="editPhone" class="input" placeholder="Phone Number (min 10 digits)" style="flex: 1;">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <input type="tel" id="editWhatsapp" class="input" placeholder="WhatsApp Number">
+                    <div style="display: flex; gap: 10px;">
+                        <select id="editWhatsappCountry" class="gender-select" style="width: 120px;">
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+971">🇦🇪 +971</option>
+                            <option value="+65">🇸🇬 +65</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+49">🇩🇪 +49</option>
+                            <option value="+33">🇫🇷 +33</option>
+                            <option value="+81">🇯🇵 +81</option>
+                            <option value="+86">🇨🇳 +86</option>
+                            <option value="+7">🇷🇺 +7</option>
+                            <option value="+82">🇰🇷 +82</option>
+                            <option value="+55">🇧🇷 +55</option>
+                            <option value="+52">🇲🇽 +52</option>
+                            <option value="+39">🇮🇹 +39</option>
+                            <option value="+34">🇪🇸 +34</option>
+                            <option value="+31">🇳🇱 +31</option>
+                            <option value="+41">🇨🇭 +41</option>
+                            <option value="+46">🇸🇪 +46</option>
+                            <option value="+47">🇳🇴 +47</option>
+                            <option value="+45">🇩🇰 +45</option>
+                            <option value="+358">🇫🇮 +358</option>
+                            <option value="+43">🇦🇹 +43</option>
+                            <option value="+32">🇧🇪 +32</option>
+                            <option value="+351">🇵🇹 +351</option>
+                            <option value="+30">🇬🇷 +30</option>
+                            <option value="+48">🇵🇱 +48</option>
+                            <option value="+420">🇨🇿 +420</option>
+                            <option value="+36">🇭🇺 +36</option>
+                            <option value="+40">🇷🇴 +40</option>
+                            <option value="+90">🇹🇷 +90</option>
+                            <option value="+972">🇮🇱 +972</option>
+                            <option value="+966">🇸🇦 +966</option>
+                            <option value="+974">🇶🇦 +974</option>
+                            <option value="+965">🇰🇼 +965</option>
+                            <option value="+968">🇴🇲 +968</option>
+                            <option value="+973">🇧🇭 +973</option>
+                            <option value="+60">🇲🇾 +60</option>
+                            <option value="+66">🇹🇭 +66</option>
+                            <option value="+62">🇮🇩 +62</option>
+                            <option value="+63">🇵🇭 +63</option>
+                            <option value="+84">🇻🇳 +84</option>
+                            <option value="+880">🇧🇩 +880</option>
+                            <option value="+94">🇱🇰 +94</option>
+                            <option value="+977">🇳🇵 +977</option>
+                            <option value="+92">🇵🇰 +92</option>
+                            <option value="+98">🇮🇷 +98</option>
+                            <option value="+964">🇮🇶 +964</option>
+                            <option value="+962">🇯🇴 +962</option>
+                            <option value="+961">🇱🇧 +961</option>
+                            <option value="+963">🇸🇾 +963</option>
+                            <option value="+20">🇪🇬 +20</option>
+                            <option value="+27">🇿🇦 +27</option>
+                            <option value="+234">🇳🇬 +234</option>
+                            <option value="+254">🇰🇪 +254</option>
+                            <option value="+233">🇬🇭 +233</option>
+                            <option value="+212">🇲🇦 +212</option>
+                            <option value="+213">🇩🇿 +213</option>
+                            <option value="+216">🇹🇳 +216</option>
+                            <option value="+218">🇱🇾 +218</option>
+                            <option value="+251">🇪🇹 +251</option>
+                            <option value="+256">🇺🇬 +256</option>
+                            <option value="+255">🇹🇿 +255</option>
+                        </select>
+                        <input type="tel" id="editWhatsapp" class="input" placeholder="WhatsApp Number (min 10 digits)" style="flex: 1;">
+                    </div>
                 </div>
                 <div class="form-group">
                     <input type="text" id="editCompany" class="input" placeholder="Company" required>
@@ -1581,6 +1849,56 @@
             }
         }
         
+        function validatePhone(field) {
+            const phoneInput = document.getElementById(field);
+            const phone = phoneInput.value.trim().replace(/\D/g, '');
+            
+            if (phone && phone.length < 10) {
+                phoneInput.setCustomValidity('Phone number must be at least 10 digits');
+                phoneInput.reportValidity();
+                return false;
+            } else {
+                phoneInput.setCustomValidity('');
+                return true;
+            }
+        }
+        
+        async function validateAndCheckDuplicate(field) {
+            if (!validatePhone(field)) return;
+            
+            const countryCode = document.getElementById('phoneCountry').value;
+            const phoneNumber = document.getElementById(field).value.trim().replace(/\D/g, '');
+            const fullPhone = countryCode + phoneNumber;
+            
+            if (!phoneNumber) return;
+            
+            // Load alumni if not loaded
+            if (alumni.length === 0) {
+                await loadAlumni();
+            }
+            
+            const existing = alumni.find(alum => 
+                alum[field] && alum[field].replace(/\D/g, '').includes(phoneNumber)
+            );
+            
+            const messageContainer = document.getElementById('validationMessage');
+            
+            if (existing) {
+                duplicateRecord = existing;
+                messageContainer.innerHTML = `
+                    <div class="validation-message">
+                        ⚠️ A profile already exists with this ${field}.<br>
+                        <span class="view-profile-link" onclick="viewExistingProfile()">
+                            Click here to view existing profile
+                        </span>
+                    </div>
+                `;
+            } else {
+                messageContainer.innerHTML = '';
+                duplicateRecord = null;
+            }
+        }
+        
         async function checkDuplicate(field) {
             const value = document.getElementById(field).value.trim();
             if (!value) return;
@@ -1639,17 +1957,30 @@
                 return;
             }
             
+            // Validate phone numbers
+            const phoneValid = validatePhone('phone');
+            const whatsappValid = validatePhone('whatsapp');
+            
+            if (!phoneValid || !whatsappValid) {
+                return;
+            }
+            
+            const phoneCountry = document.getElementById('phoneCountry').value;
+            const whatsappCountry = document.getElementById('whatsappCountry').value;
+            const phoneNumber = document.getElementById('phone').value.trim();
+            const whatsappNumber = document.getElementById('whatsapp').value.trim();
+            
             const formData = {
-                name: document.getElementById('name').value,
+                name: document.getElementById('name').value.trim(),
                 gender: document.getElementById('gender').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                whatsapp: document.getElementById('whatsapp').value,
-                company: document.getElementById('company').value,
-                designation: document.getElementById('designation').value,
-                city: document.getElementById('city').value,
+                email: document.getElementById('email').value.trim().toLowerCase(),
+                phone: phoneNumber ? phoneCountry + phoneNumber.replace(/\D/g, '') : '',
+                whatsapp: whatsappNumber ? whatsappCountry + whatsappNumber.replace(/\D/g, '') : '',
+                company: document.getElementById('company').value.trim(),
+                designation: document.getElementById('designation').value.trim(),
+                city: document.getElementById('city').value.trim(),
                 graduationYear: document.getElementById('graduationYear').value,
-                linkedin: document.getElementById('linkedin').value,
+                linkedin: document.getElementById('linkedin').value.trim(),
                 createdAt: new Date().toISOString()
             };
             
@@ -2132,8 +2463,29 @@
             document.getElementById('editName').value = alum.name || '';
             document.getElementById('editGender').value = alum.gender || '';
             document.getElementById('editEmail').value = alum.email || '';
-            document.getElementById('editPhone').value = alum.phone || '';
-            document.getElementById('editWhatsapp').value = alum.whatsapp || '';
+            
+            // Parse phone number for editing
+            if (alum.phone) {
+                const phoneMatch = alum.phone.match(/^(\+\d{1,4})(\d+)$/);
+                if (phoneMatch) {
+                    document.getElementById('editPhoneCountry').value = phoneMatch[1];
+                    document.getElementById('editPhone').value = phoneMatch[2];
+                } else {
+                    document.getElementById('editPhone').value = alum.phone;
+                }
+            }
+            
+            // Parse WhatsApp number for editing
+            if (alum.whatsapp) {
+                const whatsappMatch = alum.whatsapp.match(/^(\+\d{1,4})(\d+)$/);
+                if (whatsappMatch) {
+                    document.getElementById('editWhatsappCountry').value = whatsappMatch[1];
+                    document.getElementById('editWhatsapp').value = whatsappMatch[2];
+                } else {
+                    document.getElementById('editWhatsapp').value = alum.whatsapp;
+                }
+            }
+            
             document.getElementById('editCompany').value = alum.company || '';
             document.getElementById('editDesignation').value = alum.designation || '';
             document.getElementById('editCity').value = alum.city || '';
@@ -2151,17 +2503,22 @@
             event.preventDefault();
             
             const id = document.getElementById('editId').value;
+            const editPhoneCountry = document.getElementById('editPhoneCountry').value;
+            const editWhatsappCountry = document.getElementById('editWhatsappCountry').value;
+            const editPhoneNumber = document.getElementById('editPhone').value.trim();
+            const editWhatsappNumber = document.getElementById('editWhatsapp').value.trim();
+            
             const updatedData = {
-                name: document.getElementById('editName').value,
+                name: document.getElementById('editName').value.trim(),
                 gender: document.getElementById('editGender').value,
-                email: document.getElementById('editEmail').value,
-                phone: document.getElementById('editPhone').value,
-                whatsapp: document.getElementById('editWhatsapp').value,
-                company: document.getElementById('editCompany').value,
-                designation: document.getElementById('editDesignation').value,
-                city: document.getElementById('editCity').value,
+                email: document.getElementById('editEmail').value.trim().toLowerCase(),
+                phone: editPhoneNumber ? editPhoneCountry + editPhoneNumber.replace(/\D/g, '') : '',
+                whatsapp: editWhatsappNumber ? editWhatsappCountry + editWhatsappNumber.replace(/\D/g, '') : '',
+                company: document.getElementById('editCompany').value.trim(),
+                designation: document.getElementById('editDesignation').value.trim(),
+                city: document.getElementById('editCity').value.trim(),
                 graduationYear: document.getElementById('editGraduationYear').value,
-                linkedin: document.getElementById('editLinkedin').value,
+                linkedin: document.getElementById('editLinkedin').value.trim(),
                 updatedAt: new Date().toISOString()
             };
             
@@ -2247,7 +2604,9 @@
         });
         
         async function deleteAlumni(id, name) {
-            if (!confirm(`Are you sure you want to delete ${name}'s record? This action cannot be undone.`)) {
+            // Escape name to prevent XSS
+            const safeName = name.replace(/[<>"'&]/g, '');
+            if (!confirm(`Are you sure you want to delete ${safeName}'s record? This action cannot be undone.`)) {
                 return;
             }
             
