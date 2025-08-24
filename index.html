@@ -587,12 +587,30 @@
             cursor: pointer;
             font-size: 0.8rem;
             margin-top: 10px;
+            margin-right: 5px;
             transition: all 0.3s ease;
         }
         
         .edit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
         }
         
         .analytics-card {
@@ -1311,33 +1329,33 @@
                 <div class="alphabet-filter">
                     <div class="alphabet-header">Browse by Name:</div>
                     <div class="alphabet-buttons">
-                        <button class="alphabet-btn" onclick="browseByLetter('ALL')">ALL</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('A')">A</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('B')">B</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('C')">C</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('D')">D</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('E')">E</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('F')">F</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('G')">G</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('H')">H</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('I')">I</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('J')">J</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('K')">K</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('L')">L</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('M')">M</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('N')">N</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('O')">O</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('P')">P</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('Q')">Q</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('R')">R</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('S')">S</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('T')">T</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('U')">U</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('V')">V</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('W')">W</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('X')">X</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('Y')">Y</button>
-                        <button class="alphabet-btn" onclick="browseByLetter('Z')">Z</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('ALL', this)">ALL</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('A', this)">A</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('B', this)">B</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('C', this)">C</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('D', this)">D</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('E', this)">E</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('F', this)">F</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('G', this)">G</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('H', this)">H</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('I', this)">I</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('J', this)">J</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('K', this)">K</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('L', this)">L</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('M', this)">M</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('N', this)">N</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('O', this)">O</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('P', this)">P</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('Q', this)">Q</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('R', this)">R</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('S', this)">S</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('T', this)">T</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('U', this)">U</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('V', this)">V</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('W', this)">W</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('X', this)">X</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('Y', this)">Y</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('Z', this)">Z</button>
                     </div>
                 </div>
             </div>
@@ -1636,10 +1654,20 @@
             };
             
             try {
-                await window.firestore.addDoc(window.firestore.collection(window.db, 'alumni'), formData);
+                const docRef = await window.firestore.addDoc(window.firestore.collection(window.db, 'alumni'), formData);
+                
+                // Add new record to local alumni array with the generated ID
+                const newAlumni = { id: docRef.id, ...formData };
+                alumni.push(newAlumni);
+                
+                // Update search results if currently displayed
+                if (searchResults.length > 0) {
+                    searchResults.push(newAlumni);
+                    searchResults.sort((a, b) => a.name.localeCompare(b.name));
+                }
+                
                 document.getElementById('addForm').reset();
                 hideAddForm();
-                alumni = []; // Reset to reload
                 showThankYou();
             } catch (error) {
                 console.error('Error adding alumni:', error);
@@ -1679,7 +1707,7 @@
             btn.disabled = false;
         }
         
-        async function browseByLetter(letter) {
+        async function browseByLetter(letter, clickedButton) {
             // Load alumni if not loaded
             if (alumni.length === 0) {
                 await loadAlumni();
@@ -1689,7 +1717,9 @@
             document.querySelectorAll('.alphabet-btn').forEach(btn => btn.classList.remove('active'));
             
             // Add active class to clicked button
-            event.target.classList.add('active');
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
             
             let filtered;
             if (letter === 'ALL') {
@@ -1726,7 +1756,10 @@
                     ${alum.whatsapp ? `<p><span style="color: #25D366;">💬</span> ${alum.whatsapp}</p>` : ''}
                     ${alum.graduationYear ? `<p><span style="color: #ffffff;">🎓</span> Class of ${alum.graduationYear}</p>` : ''}
                     ${alum.linkedin ? `<p><span style="color: #0077B5;">🔗</span> <a href="${formatLinkedInURL(alum.linkedin)}" target="_blank" style="color: #0077B5; text-decoration: none;">LinkedIn</a></p>` : ''}
-                    ${isAdmin ? `<button class="edit-btn" onclick="editAlumni('${alum.id}')">✏️ Edit</button>` : ''}
+                    ${isAdmin ? `
+                        <button class="edit-btn" onclick="editAlumni('${alum.id}')">✏️ Edit</button>
+                        <button class="delete-btn" onclick="deleteAlumni('${alum.id}', '${alum.name}')">🗑️ Delete</button>
+                    ` : ''}
                 </div>
             `).join('');
         }
@@ -2213,11 +2246,39 @@
             }
         });
         
-        // Load updateDoc for editing
+        async function deleteAlumni(id, name) {
+            if (!confirm(`Are you sure you want to delete ${name}'s record? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                await window.firestore.deleteDoc(window.firestore.doc(window.db, 'alumni', id));
+                
+                // Remove from local alumni array
+                const index = alumni.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    alumni.splice(index, 1);
+                }
+                
+                alert('Alumni record deleted successfully!');
+                
+                // Refresh current view
+                const currentResults = searchResults.length > 0 ? searchResults.filter(a => a.id !== id) : alumni;
+                searchResults = currentResults;
+                displayResults(currentResults);
+                
+            } catch (error) {
+                console.error('Error deleting alumni:', error);
+                alert('Error deleting alumni. Please try again.');
+            }
+        }
+        
+        // Load Firebase functions for editing and deleting
         (async () => {
-            const { updateDoc, doc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+            const { updateDoc, doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
             window.firestore.updateDoc = updateDoc;
             window.firestore.doc = doc;
+            window.firestore.deleteDoc = deleteDoc;
         })();
     </script>
     
