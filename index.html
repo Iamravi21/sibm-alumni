@@ -979,7 +979,7 @@
         
         .search-form { 
             display: flex; 
-            gap: 1.5rem; 
+            gap: 0.2rem; 
             margin-bottom: 2rem; 
             flex-wrap: wrap;
             align-items: flex-end;
@@ -989,11 +989,11 @@
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 16px;
-            padding: 16px 20px;
+            padding: 18px 24px;
             flex: 1;
-            min-width: 250px;
+            min-width: 350px;
             color: white;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 500;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
@@ -1327,6 +1327,7 @@
                     <button class="main-btn" onclick="showRegisterForm()">📝 Register As Alumni</button>
                     <button class="main-btn" onclick="showSearchStep()">🔍 Search Alumni</button>
                     <button class="main-btn" onclick="showDashboard()">📈 Alumni Dashboard</button>
+                    <button class="main-btn" onclick="showUpdateProfile()">✏️ Update My Profile</button>
                 </div>
             </div>
             
@@ -1444,6 +1445,7 @@
     
     <div id="addModal" class="modal">
         <div class="modal-content">
+            <button class="back-btn" onclick="hideAddForm()" style="margin-bottom: 1rem;">← Back</button>
             <h2>Add Alumni</h2>
             <form id="addForm" onsubmit="addAlumni(event)">
                 <div class="form-group">
@@ -1840,6 +1842,24 @@
         </div>
     </div>
     
+    <!-- Update Profile Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <button class="back-btn" onclick="hideUpdateProfile()" style="margin-bottom: 1rem;">← Back</button>
+            <h2>Update My Profile</h2>
+            <p style="text-align: center; margin-bottom: 2rem; opacity: 0.9;">Enter your email or phone to verify and update your profile</p>
+            <form id="verifyForm" onsubmit="verifyProfile(event)">
+                <div class="form-group">
+                    <input type="text" id="verifyInput" class="input" placeholder="Enter your email or phone number" required>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn">Find My Profile</button>
+                    <button type="button" onclick="hideUpdateProfile()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <!-- Thank You Overlay -->
     <div id="thankYouOverlay" class="thank-you-overlay">
         <div class="thank-you-message">
@@ -2152,8 +2172,8 @@
                     <p><span style="color: #ff4444;">📍</span> ${alum.city}</p>
                     ${alum.designation ? `<p><span style="color: #ff6666;">💼</span> ${alum.designation}</p>` : ''}
                     ${alum.email ? `<p><span style="color: #ff8888;">📧</span> ${alum.email}</p>` : ''}
-                    ${alum.phone ? `<p><span style="color: #ffaaaa;">📱</span> ${alum.phone}</p>` : ''}
-                    ${alum.whatsapp ? `<p><span style="color: #25D366;">💬</span> ${alum.whatsapp}</p>` : ''}
+                    ${alum.phone ? `<p><span style="color: #ffaaaa;">📱</span> <span style="word-break: break-all;">${alum.phone}</span></p>` : ''}
+                    ${alum.whatsapp ? `<p><span style="color: #25D366;">💬</span> <span style="word-break: break-all;">${alum.whatsapp}</span></p>` : ''}
                     ${alum.graduationYear ? `<p><span style="color: #ffffff;">🎓</span> Class of ${alum.graduationYear}</p>` : ''}
                     ${alum.linkedin ? `<p><span style="color: #0077B5;">🔗</span> <a href="${formatLinkedInURL(alum.linkedin)}" target="_blank" style="color: #0077B5; text-decoration: none;">LinkedIn</a></p>` : ''}
                     ${isAdmin ? `
@@ -2174,7 +2194,9 @@
             duplicateRecord = null;
         }
         
-        function showThankYou() {
+        function showThankYou(title = 'Thank You!', message = 'Welcome to the SIBM Pune Executive MBA Alumni Network!<br>Your registration has been successfully completed.') {
+            document.querySelector('.thank-you-title').innerHTML = title;
+            document.querySelector('.thank-you-text').innerHTML = message;
             document.getElementById('thankYouOverlay').classList.add('show');
         }
         
@@ -2233,6 +2255,53 @@
         function showRegisterForm() {
             document.getElementById('addModal').classList.add('show');
             saveState('register');
+        }
+        
+        function showUpdateProfile() {
+            document.getElementById('updateModal').classList.add('show');
+            saveState('update');
+        }
+        
+        function hideUpdateProfile() {
+            document.getElementById('updateModal').classList.remove('show');
+            document.getElementById('verifyInput').value = '';
+        }
+        
+        async function verifyProfile(event) {
+            event.preventDefault();
+            
+            const input = document.getElementById('verifyInput').value.trim();
+            
+            if (alumni.length === 0) {
+                await loadAlumni();
+            }
+            
+            let found = null;
+            
+            // Strict email validation
+            if (input.includes('@') && input.includes('.')) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailRegex.test(input)) {
+                    found = alumni.find(alum => 
+                        alum.email && alum.email.toLowerCase() === input.toLowerCase()
+                    );
+                }
+            } else {
+                // Strict phone validation - must be at least 10 digits
+                const phoneDigits = input.replace(/\D/g, '');
+                if (phoneDigits.length >= 10) {
+                    found = alumni.find(alum => 
+                        alum.phone && alum.phone.replace(/\D/g, '').endsWith(phoneDigits)
+                    );
+                }
+            }
+            
+            if (found) {
+                hideUpdateProfile();
+                editAlumni(found.id);
+            } else {
+                alert('No profile found with this email or phone number. Please check and try again.');
+            }
         }
         
         // Ensure form submission works
@@ -2722,7 +2791,7 @@
                 }
                 
                 hideEditForm();
-                alert('Alumni updated successfully!');
+                showThankYou('Profile Updated Successfully!', 'Your information has been updated in the alumni database.');
                 
                 // Refresh current view
                 const currentResults = searchResults.length > 0 ? searchResults : alumni;
@@ -2858,6 +2927,9 @@
                             break;
                         case 'register':
                             showRegisterForm();
+                            break;
+                        case 'update':
+                            showUpdateProfile();
                             break;
                         default:
                             showMainButtons();
