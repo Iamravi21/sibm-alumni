@@ -2202,7 +2202,7 @@
                     ${alum.linkedin ? `<p><span style="color: #0077B5;">🔗</span> <a href="${formatLinkedInURL(alum.linkedin)}" target="_blank" style="color: #0077B5; text-decoration: none;">LinkedIn</a></p>` : ''}
                     ${isAdmin ? `
                         <button class="edit-btn" onclick="editAlumni('${alum.id}')">✏️ Edit</button>
-                        <button class="delete-btn" onclick="deleteAlumni('${alum.id}', '${alum.name}')">🗑️ Delete</button>
+                        <button class="delete-btn" onclick="deleteAlumni('${alum.id}', '${alum.name.replace(/'/g, "\\'")}')">🗑️ Delete</button>
                     ` : ''}
                 </div>
             `).join('');
