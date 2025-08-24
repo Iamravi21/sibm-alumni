@@ -458,8 +458,8 @@
         }
         
         @keyframes filterPulse {
-            from { box-shadow: 0 0 10px rgba(255, 68, 68, 0.3); }
-            to { box-shadow: 0 0 20px rgba(255, 68, 68, 0.6); }
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(255, 68, 68, 0.5); }
         }
         
         .filter-btn.active {
@@ -548,9 +548,8 @@
         }
         
         @keyframes letterBounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(-2px) scale(1.1) rotate(5deg); }
-            40% { transform: translateY(-5px) scale(1.15) rotate(-2deg); }
-            60% { transform: translateY(-3px) scale(1.12) rotate(3deg); }
+            0%, 100% { transform: translateY(-2px) scale(1.1); }
+            50% { transform: translateY(-4px) scale(1.12); }
         }
         
         .alphabet-btn.active {
@@ -594,8 +593,8 @@
         }
         
         @keyframes adminPulse {
-            from { box-shadow: 0 0 10px rgba(255, 68, 68, 0.3); }
-            to { box-shadow: 0 0 20px rgba(255, 68, 68, 0.6); }
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(255, 68, 68, 0.5); }
         }
         
         .edit-btn {
@@ -618,8 +617,8 @@
         }
         
         @keyframes editBtnPulse {
-            from { box-shadow: 0 8px 20px rgba(40, 167, 69, 0.6); }
-            to { box-shadow: 0 12px 25px rgba(40, 167, 69, 0.8); }
+            0%, 100% { box-shadow: 0 8px 20px rgba(40, 167, 69, 0.6); }
+            50% { box-shadow: 0 10px 22px rgba(40, 167, 69, 0.7); }
         }
         
         .delete-btn {
@@ -641,9 +640,8 @@
         }
         
         @keyframes deleteBtnShake {
-            0%, 100% { transform: translateY(-2px) scale(1.1) rotate(2deg); }
-            25% { transform: translateY(-2px) scale(1.1) rotate(-1deg); }
-            75% { transform: translateY(-2px) scale(1.1) rotate(1deg); }
+            0%, 100% { transform: translateY(-2px) scale(1.1); }
+            50% { transform: translateY(-2px) scale(1.1) rotate(1deg); }
         }
         
         .analytics-card {
@@ -667,8 +665,8 @@
         }
         
         @keyframes cardHoverFloat {
-            from { transform: translateY(-10px) scale(1.05) rotateX(10deg); }
-            to { transform: translateY(-12px) scale(1.05) rotateX(8deg); }
+            0%, 100% { transform: translateY(-10px) scale(1.05); }
+            50% { transform: translateY(-11px) scale(1.05); }
         }
         
         .analytics-card::before {
@@ -1081,8 +1079,8 @@
         }
         
         @keyframes btnGlow {
-            from { box-shadow: 0 15px 40px rgba(255, 0, 0, 0.6); }
-            to { box-shadow: 0 20px 50px rgba(255, 0, 0, 0.8); }
+            0%, 100% { box-shadow: 0 15px 40px rgba(255, 0, 0, 0.6); }
+            50% { box-shadow: 0 18px 45px rgba(255, 0, 0, 0.7); }
         }
         
         .btn:active {
@@ -1150,8 +1148,8 @@
         }
         
         @keyframes cardFloat {
-            from { transform: translateY(-15px) scale(1.03) rotateX(5deg); }
-            to { transform: translateY(-18px) scale(1.03) rotateX(3deg); }
+            0%, 100% { transform: translateY(-15px) scale(1.03); }
+            50% { transform: translateY(-17px) scale(1.03); }
         }
         
         @keyframes cardSlideIn {
@@ -1905,6 +1903,25 @@
         const ADMIN_PASSWORD = 'sibm2024';
         const PORTAL_PIN = 'SIBMEXE';
         
+        // State management
+        function saveState(page, data = {}) {
+            const state = { page, data, timestamp: Date.now() };
+            localStorage.setItem('sibmPortalState', JSON.stringify(state));
+            window.location.hash = page;
+        }
+        
+        function loadState() {
+            const saved = localStorage.getItem('sibmPortalState');
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    return null;
+                }
+            }
+            return null;
+        }
+        
         async function loadAlumni() {
             try {
                 const querySnapshot = await window.firestore.getDocs(window.firestore.collection(window.db, 'alumni'));
@@ -2027,40 +2044,56 @@
         async function addAlumni(event) {
             event.preventDefault();
             
-            // Check for duplicates before submitting
-            if (duplicateRecord) {
-                alert('Please resolve the duplicate record issue before submitting.');
-                return;
-            }
-            
-            // Validate phone numbers
-            const phoneValid = validatePhone('phone');
-            const whatsappValid = validatePhone('whatsapp');
-            
-            if (!phoneValid || !whatsappValid) {
-                return;
-            }
-            
-            const phoneCountry = document.getElementById('phoneCountry').value;
-            const whatsappCountry = document.getElementById('whatsappCountry').value;
-            const phoneNumber = document.getElementById('phone').value.trim();
-            const whatsappNumber = document.getElementById('whatsapp').value.trim();
-            
-            const formData = {
-                name: document.getElementById('name').value.trim(),
-                gender: document.getElementById('gender').value,
-                email: document.getElementById('email').value.trim().toLowerCase(),
-                phone: phoneNumber ? phoneCountry + phoneNumber.replace(/\D/g, '') : '',
-                whatsapp: whatsappNumber ? whatsappCountry + whatsappNumber.replace(/\D/g, '') : '',
-                company: document.getElementById('company').value.trim(),
-                designation: document.getElementById('designation').value.trim(),
-                city: document.getElementById('city').value.trim(),
-                graduationYear: document.getElementById('graduationYear').value,
-                linkedin: document.getElementById('linkedin').value.trim(),
-                createdAt: new Date().toISOString()
-            };
+            // Prevent double submission
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            if (submitBtn.disabled) return;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Adding...';
             
             try {
+                // Check for duplicates before submitting
+                if (duplicateRecord) {
+                    alert('Please resolve the duplicate record issue before submitting.');
+                    return;
+                }
+                
+                // Validate phone numbers
+                const phoneValid = validatePhone('phone');
+                const whatsappValid = validatePhone('whatsapp');
+                
+                if (!phoneValid || !whatsappValid) {
+                    return;
+                }
+                
+                const phoneCountry = document.getElementById('phoneCountry').value;
+                const whatsappCountry = document.getElementById('whatsappCountry').value;
+                const phoneNumber = document.getElementById('phone').value.trim();
+                const whatsappNumber = document.getElementById('whatsapp').value.trim();
+                const email = document.getElementById('email').value.trim().toLowerCase();
+                
+                // Final duplicate check with email and phone
+                const existingByEmail = alumni.find(a => a.email && a.email.toLowerCase() === email);
+                const existingByPhone = phoneNumber ? alumni.find(a => a.phone && a.phone.includes(phoneNumber.replace(/\D/g, ''))) : null;
+                
+                if (existingByEmail || existingByPhone) {
+                    alert('A record with this email or phone number already exists!');
+                    return;
+                }
+                
+                const formData = {
+                    name: document.getElementById('name').value.trim(),
+                    gender: document.getElementById('gender').value,
+                    email: email,
+                    phone: phoneNumber ? phoneCountry + phoneNumber.replace(/\D/g, '') : '',
+                    whatsapp: whatsappNumber ? whatsappCountry + whatsappNumber.replace(/\D/g, '') : '',
+                    company: document.getElementById('company').value.trim(),
+                    designation: document.getElementById('designation').value.trim(),
+                    city: document.getElementById('city').value.trim(),
+                    graduationYear: document.getElementById('graduationYear').value,
+                    linkedin: document.getElementById('linkedin').value.trim(),
+                    createdAt: new Date().toISOString()
+                };
+                
                 const docRef = await window.firestore.addDoc(window.firestore.collection(window.db, 'alumni'), formData);
                 
                 // Add new record to local alumni array with the generated ID
@@ -2076,9 +2109,13 @@
                 document.getElementById('addForm').reset();
                 hideAddForm();
                 showThankYou();
+                
             } catch (error) {
                 console.error('Error adding alumni:', error);
                 alert('Error adding alumni. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Add Alumni';
             }
         }
         
@@ -2236,6 +2273,7 @@
         
         function showRegisterForm() {
             document.getElementById('addModal').classList.add('show');
+            saveState('register');
         }
         
         // Ensure form submission works
@@ -2261,6 +2299,8 @@
                 displayResults(searchResults);
                 document.getElementById('filterControls').classList.add('show');
             }
+            
+            saveState('search');
         }
         
         async function showAutoComplete() {
@@ -2306,6 +2346,7 @@
             document.getElementById('mainButtons').style.display = 'none';
             document.getElementById('dashboardStep').style.display = 'block';
             await loadAnalytics();
+            saveState('dashboard');
         }
         
         async function loadAnalytics() {
@@ -2751,6 +2792,8 @@
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.alphabet-btn').forEach(btn => btn.classList.remove('active'));
             currentFilter = null;
+            
+            saveState('main');
         }
         
         function toggleFilter(type) {
@@ -2821,6 +2864,34 @@
                 alert('Error deleting alumni. Please try again.');
             }
         }
+        
+        // Restore state on page load
+        window.addEventListener('load', function() {
+            const state = loadState();
+            if (state && state.page !== 'welcome') {
+                // Skip welcome screen and go directly to saved state
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('gateContainer').style.display = 'none';
+                document.getElementById('mainContent').classList.add('show');
+                
+                // Restore the specific page
+                setTimeout(async () => {
+                    switch (state.page) {
+                        case 'search':
+                            await showSearchStep();
+                            break;
+                        case 'dashboard':
+                            await showDashboard();
+                            break;
+                        case 'register':
+                            showRegisterForm();
+                            break;
+                        default:
+                            showMainButtons();
+                    }
+                }, 100);
+            }
+        });
         
         // Load Firebase functions for editing and deleting
         (async () => {
