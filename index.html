@@ -2043,10 +2043,16 @@
                 isAdmin = true;
                 hideAdminLogin();
                 alert('Admin login successful!');
-                // Refresh current view if showing results
-                if (document.getElementById('results').innerHTML) {
-                    const currentResults = searchResults.length > 0 ? searchResults : alumni;
-                    displayResults(currentResults);
+                
+                // If on welcome screen, open the portal
+                if (document.getElementById('welcomeScreen').style.display !== 'none') {
+                    openGate();
+                } else {
+                    // Refresh current view if showing results
+                    if (document.getElementById('results').innerHTML) {
+                        const currentResults = searchResults.length > 0 ? searchResults : alumni;
+                        displayResults(currentResults);
+                    }
                 }
             } else {
                 alert('Invalid password!');
