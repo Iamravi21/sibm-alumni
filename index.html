@@ -2262,6 +2262,9 @@
             const gateContainer = document.getElementById('gateContainer');
             const mainContent = document.getElementById('mainContent');
             
+            // Mark that user has used the portal
+            localStorage.setItem('hasUsedPortal', 'true');
+            
             welcomeScreen.style.display = 'none';
             gateContainer.classList.add('opening');
             
@@ -2865,11 +2868,13 @@
             }
         }
         
-        // Restore state on page load
+        // Restore state on page load only for returning users
         window.addEventListener('load', function() {
             const state = loadState();
-            if (state && state.page !== 'welcome') {
-                // Skip welcome screen and go directly to saved state
+            const hasUsedPortal = localStorage.getItem('hasUsedPortal');
+            
+            if (state && state.page !== 'welcome' && hasUsedPortal) {
+                // Skip welcome screen and go directly to saved state for returning users
                 document.getElementById('welcomeScreen').style.display = 'none';
                 document.getElementById('gateContainer').style.display = 'none';
                 document.getElementById('mainContent').classList.add('show');
