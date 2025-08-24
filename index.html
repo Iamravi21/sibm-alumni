@@ -21,6 +21,7 @@
         window.db = getFirestore(app);
         window.firestore = { collection, addDoc, getDocs, query, where };
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -72,22 +73,28 @@
             z-index: -1;
         }
         
-        .shape {
+        .grad-hat {
             position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 20s infinite linear;
+            font-size: 2rem;
+            animation: flyUp 15s infinite linear;
+            opacity: 0.7;
         }
         
-        .shape:nth-child(1) { width: 80px; height: 80px; left: 10%; animation-delay: 0s; }
-        .shape:nth-child(2) { width: 120px; height: 120px; left: 20%; animation-delay: 2s; }
-        .shape:nth-child(3) { width: 60px; height: 60px; left: 70%; animation-delay: 4s; }
-        .shape:nth-child(4) { width: 100px; height: 100px; left: 80%; animation-delay: 6s; }
+        .grad-hat:nth-child(1) { left: 5%; animation-delay: 0s; font-size: 1.5rem; }
+        .grad-hat:nth-child(2) { left: 15%; animation-delay: 3s; font-size: 2rem; }
+        .grad-hat:nth-child(3) { left: 25%; animation-delay: 6s; font-size: 1.8rem; }
+        .grad-hat:nth-child(4) { left: 35%; animation-delay: 9s; font-size: 2.2rem; }
+        .grad-hat:nth-child(5) { left: 45%; animation-delay: 12s; font-size: 1.6rem; }
+        .grad-hat:nth-child(6) { left: 55%; animation-delay: 2s; font-size: 2rem; }
+        .grad-hat:nth-child(7) { left: 65%; animation-delay: 5s; font-size: 1.7rem; }
+        .grad-hat:nth-child(8) { left: 75%; animation-delay: 8s; font-size: 2.1rem; }
+        .grad-hat:nth-child(9) { left: 85%; animation-delay: 11s; font-size: 1.9rem; }
+        .grad-hat:nth-child(10) { left: 95%; animation-delay: 14s; font-size: 1.4rem; }
         
-        @keyframes float {
+        @keyframes flyUp {
             0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
             100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
         }
         
@@ -542,6 +549,89 @@
         @keyframes alphabetSlide {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .analytics-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            animation: cardSlideIn 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .analytics-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff0000, #ff4444, #ffffff);
+        }
+        
+        .analytics-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ff4444;
+            margin-bottom: 0.5rem;
+            animation: numberPulse 2s ease-in-out infinite;
+        }
+        
+        .analytics-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+        
+        @keyframes numberPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff0000, #ff4444, #ffffff);
+        }
+        
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff4444;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+            margin-bottom: 1rem;
         }
         
         .gender-select {
@@ -1092,10 +1182,16 @@
     <div class="bg-animation"></div>
     <div class="bg-overlay"></div>
     <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
+        <div class="grad-hat">🎓</div>
+        <div class="grad-hat">🎓</div>
+        <div class="grad-hat">🎓</div>
+        <div class="grad-hat">🎓</div>
+        <div class="grad-hat">🎓</div>
+        <div class="grad-hat">🎓</div>
+        <div class="grad-hat">🎓</div>
+        <div class="grad-hat">🎓</div>
+        <div class="grad-hat">🎓</div>
+        <div class="grad-hat">🎓</div>
     </div>
     
     <!-- Welcome Screen -->
@@ -1167,55 +1263,102 @@
                     <div class="filter-btn" onclick="toggleFilter('graduationYear')">Filter by Year</div>
                     <input type="text" id="filterInput" class="input" placeholder="Enter filter value..." style="display: none;">
                 </div>
+                
+                <div class="alphabet-filter">
+                    <div class="alphabet-header">Browse by Name:</div>
+                    <div class="alphabet-buttons">
+                        <button class="alphabet-btn" onclick="browseByLetter('ALL')">ALL</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('A')">A</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('B')">B</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('C')">C</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('D')">D</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('E')">E</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('F')">F</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('G')">G</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('H')">H</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('I')">I</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('J')">J</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('K')">K</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('L')">L</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('M')">M</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('N')">N</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('O')">O</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('P')">P</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('Q')">Q</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('R')">R</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('S')">S</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('T')">T</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('U')">U</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('V')">V</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('W')">W</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('X')">X</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('Y')">Y</button>
+                        <button class="alphabet-btn" onclick="browseByLetter('Z')">Z</button>
+                    </div>
+                </div>
             </div>
             
             <div id="results" class="grid"></div>
         </div>
     </div>
     
-    <!-- Alumni Dashboard -->
+    <!-- Analytics Dashboard -->
     <div id="dashboardStep" class="search-step glass" style="display: none;">
         <button class="back-btn" onclick="showMainButtons()">← Back</button>
         
         <div class="search-header">
-            <h2 class="search-title">📈 Alumni Dashboard</h2>
-            <p class="search-subtitle">Browse all registered alumni</p>
+            <h2 class="search-title">📊 Analytics Dashboard</h2>
+            <p class="search-subtitle">Comprehensive insights into alumni data</p>
         </div>
         
-        <div class="alphabet-filter">
-            <div class="alphabet-header">Filter by Name:</div>
-            <div class="alphabet-buttons">
-                <button class="alphabet-btn" onclick="filterByLetter('ALL')">ALL</button>
-                <button class="alphabet-btn" onclick="filterByLetter('A')">A</button>
-                <button class="alphabet-btn" onclick="filterByLetter('B')">B</button>
-                <button class="alphabet-btn" onclick="filterByLetter('C')">C</button>
-                <button class="alphabet-btn" onclick="filterByLetter('D')">D</button>
-                <button class="alphabet-btn" onclick="filterByLetter('E')">E</button>
-                <button class="alphabet-btn" onclick="filterByLetter('F')">F</button>
-                <button class="alphabet-btn" onclick="filterByLetter('G')">G</button>
-                <button class="alphabet-btn" onclick="filterByLetter('H')">H</button>
-                <button class="alphabet-btn" onclick="filterByLetter('I')">I</button>
-                <button class="alphabet-btn" onclick="filterByLetter('J')">J</button>
-                <button class="alphabet-btn" onclick="filterByLetter('K')">K</button>
-                <button class="alphabet-btn" onclick="filterByLetter('L')">L</button>
-                <button class="alphabet-btn" onclick="filterByLetter('M')">M</button>
-                <button class="alphabet-btn" onclick="filterByLetter('N')">N</button>
-                <button class="alphabet-btn" onclick="filterByLetter('O')">O</button>
-                <button class="alphabet-btn" onclick="filterByLetter('P')">P</button>
-                <button class="alphabet-btn" onclick="filterByLetter('Q')">Q</button>
-                <button class="alphabet-btn" onclick="filterByLetter('R')">R</button>
-                <button class="alphabet-btn" onclick="filterByLetter('S')">S</button>
-                <button class="alphabet-btn" onclick="filterByLetter('T')">T</button>
-                <button class="alphabet-btn" onclick="filterByLetter('U')">U</button>
-                <button class="alphabet-btn" onclick="filterByLetter('V')">V</button>
-                <button class="alphabet-btn" onclick="filterByLetter('W')">W</button>
-                <button class="alphabet-btn" onclick="filterByLetter('X')">X</button>
-                <button class="alphabet-btn" onclick="filterByLetter('Y')">Y</button>
-                <button class="alphabet-btn" onclick="filterByLetter('Z')">Z</button>
+        <!-- Key Metrics -->
+        <div class="analytics-grid">
+            <div class="analytics-card">
+                <div class="analytics-number" id="totalAlumni">0</div>
+                <div class="analytics-label">Total Alumni</div>
+            </div>
+            <div class="analytics-card">
+                <div class="analytics-number" id="totalCompanies">0</div>
+                <div class="analytics-label">Companies</div>
+            </div>
+            <div class="analytics-card">
+                <div class="analytics-number" id="totalCities">0</div>
+                <div class="analytics-label">Cities</div>
+            </div>
+            <div class="analytics-card">
+                <div class="analytics-number" id="avgGradYear">-</div>
+                <div class="analytics-label">Avg Grad Year</div>
             </div>
         </div>
         
-        <div id="dashboardResults" class="grid"></div>
+        <!-- Charts -->
+        <div class="chart-container">
+            <div class="chart-title">🏢 Top Companies</div>
+            <div class="chart-wrapper">
+                <canvas id="companyChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">📍 Alumni by City</div>
+            <div class="chart-wrapper">
+                <canvas id="cityChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">🎓 Graduation Years</div>
+            <div class="chart-wrapper">
+                <canvas id="yearChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">👥 Gender Distribution</div>
+            <div class="chart-wrapper">
+                <canvas id="genderChart"></canvas>
+            </div>
+        </div>
     </div>
     
     <div id="addModal" class="modal">
@@ -1549,23 +1692,7 @@
             document.getElementById('autocompleteDropdown').classList.remove('show');
         }
         
-        function showDashboard() {
-            document.getElementById('mainButtons').style.display = 'none';
-            document.getElementById('dashboardStep').style.display = 'block';
-            loadDashboard();
-        }
-        
-        async function loadDashboard() {
-            if (alumni.length === 0) {
-                await loadAlumni();
-            }
-            
-            // Sort alumni alphabetically
-            const sortedAlumni = [...alumni].sort((a, b) => a.name.localeCompare(b.name));
-            displayDashboardResults(sortedAlumni);
-        }
-        
-        function filterByLetter(letter) {
+        function browseByLetter(letter) {
             // Remove active class from all buttons
             document.querySelectorAll('.alphabet-btn').forEach(btn => btn.classList.remove('active'));
             
@@ -1581,29 +1708,203 @@
                 ).sort((a, b) => a.name.localeCompare(b.name));
             }
             
-            displayDashboardResults(filtered);
+            displayResults(filtered);
         }
         
-        function displayDashboardResults(results) {
-            const container = document.getElementById('dashboardResults');
-            if (results.length === 0) {
-                container.innerHTML = '<div class="no-results">✨ No alumni found for this letter!</div>';
-                return;
+        async function showDashboard() {
+            document.getElementById('mainButtons').style.display = 'none';
+            document.getElementById('dashboardStep').style.display = 'block';
+            await loadAnalytics();
+        }
+        
+        async function loadAnalytics() {
+            if (alumni.length === 0) {
+                await loadAlumni();
             }
             
-            container.innerHTML = results.map((alum, index) => `
-                <div class="card" style="animation-delay: ${index * 0.05}s">
-                    <h3>${alum.name} ${alum.gender ? `<span style="font-size: 0.8em; opacity: 0.7;">(${alum.gender})</span>` : ''}</h3>
-                    <p><span style="color: #ff0000;">🏢</span> <strong>${alum.company}</strong></p>
-                    <p><span style="color: #ff4444;">📍</span> ${alum.city}</p>
-                    ${alum.designation ? `<p><span style="color: #ff6666;">💼</span> ${alum.designation}</p>` : ''}
-                    ${alum.email ? `<p><span style="color: #ff8888;">📧</span> ${alum.email}</p>` : ''}
-                    ${alum.phone ? `<p><span style="color: #ffaaaa;">📱</span> ${alum.phone}</p>` : ''}
-                    ${alum.whatsapp ? `<p><span style="color: #25D366;">💬</span> ${alum.whatsapp}</p>` : ''}
-                    ${alum.graduationYear ? `<p><span style="color: #ffffff;">🎓</span> Class of ${alum.graduationYear}</p>` : ''}
-                    ${alum.linkedin ? `<p><span style="color: #0077B5;">🔗</span> <a href="${formatLinkedInURL(alum.linkedin)}" target="_blank" style="color: #0077B5; text-decoration: none;">LinkedIn</a></p>` : ''}
-                </div>
-            `).join('');
+            // Calculate metrics
+            const totalAlumni = alumni.length;
+            const companies = [...new Set(alumni.map(a => a.company).filter(c => c))];
+            const cities = [...new Set(alumni.map(a => a.city).filter(c => c))];
+            const years = alumni.map(a => parseInt(a.graduationYear)).filter(y => !isNaN(y));
+            const avgYear = years.length > 0 ? Math.round(years.reduce((a, b) => a + b, 0) / years.length) : '-';
+            
+            // Update metrics
+            document.getElementById('totalAlumni').textContent = totalAlumni;
+            document.getElementById('totalCompanies').textContent = companies.length;
+            document.getElementById('totalCities').textContent = cities.length;
+            document.getElementById('avgGradYear').textContent = avgYear;
+            
+            // Create charts
+            createCompanyChart();
+            createCityChart();
+            createYearChart();
+            createGenderChart();
+        }
+        
+        function createCompanyChart() {
+            const ctx = document.getElementById('companyChart').getContext('2d');
+            const companyCounts = {};
+            alumni.forEach(alum => {
+                if (alum.company) {
+                    companyCounts[alum.company] = (companyCounts[alum.company] || 0) + 1;
+                }
+            });
+            
+            const sortedCompanies = Object.entries(companyCounts)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 10);
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedCompanies.map(([company]) => company),
+                    datasets: [{
+                        label: 'Alumni Count',
+                        data: sortedCompanies.map(([, count]) => count),
+                        backgroundColor: 'rgba(255, 68, 68, 0.8)',
+                        borderColor: '#ff4444',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: 'white', maxRotation: 45 },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createCityChart() {
+            const ctx = document.getElementById('cityChart').getContext('2d');
+            const cityCounts = {};
+            alumni.forEach(alum => {
+                if (alum.city) {
+                    cityCounts[alum.city] = (cityCounts[alum.city] || 0) + 1;
+                }
+            });
+            
+            const sortedCities = Object.entries(cityCounts)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 8);
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: sortedCities.map(([city]) => city),
+                    datasets: [{
+                        data: sortedCities.map(([, count]) => count),
+                        backgroundColor: [
+                            '#ff0000', '#ff4444', '#ff6666', '#ff8888',
+                            '#ffaaaa', '#ffcccc', '#ffffff', '#f0f0f0'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#000'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: 'white' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createYearChart() {
+            const ctx = document.getElementById('yearChart').getContext('2d');
+            const yearCounts = {};
+            alumni.forEach(alum => {
+                if (alum.graduationYear) {
+                    yearCounts[alum.graduationYear] = (yearCounts[alum.graduationYear] || 0) + 1;
+                }
+            });
+            
+            const sortedYears = Object.entries(yearCounts)
+                .sort(([a], [b]) => parseInt(a) - parseInt(b));
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sortedYears.map(([year]) => year),
+                    datasets: [{
+                        label: 'Alumni Count',
+                        data: sortedYears.map(([, count]) => count),
+                        borderColor: '#ff4444',
+                        backgroundColor: 'rgba(255, 68, 68, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function createGenderChart() {
+            const ctx = document.getElementById('genderChart').getContext('2d');
+            const genderCounts = {};
+            alumni.forEach(alum => {
+                const gender = alum.gender || 'Not Specified';
+                genderCounts[gender] = (genderCounts[gender] || 0) + 1;
+            });
+            
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(genderCounts),
+                    datasets: [{
+                        data: Object.values(genderCounts),
+                        backgroundColor: ['#ff0000', '#ff4444', '#ff8888', '#ffcccc'],
+                        borderWidth: 2,
+                        borderColor: '#000'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: 'white' }
+                        }
+                    }
+                }
+            });
         }
         
         function showMainButtons() {
@@ -1611,7 +1912,6 @@
             document.getElementById('dashboardStep').style.display = 'none';
             document.getElementById('mainButtons').style.display = 'block';
             document.getElementById('results').innerHTML = '';
-            document.getElementById('dashboardResults').innerHTML = '';
             document.getElementById('filterControls').classList.remove('show');
             
             // Clear search fields
